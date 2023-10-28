@@ -10,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ships")
-public class Ship extends BaseEntity{
+public class ShipEntity extends BaseEntity{
 
     @Column(name = "name")
     private String name;
@@ -28,12 +28,12 @@ public class Ship extends BaseEntity{
     private String additionalInfo;
 
     @OneToMany
-    private Set<User> crew;
+    private Set<UserEntity> crew;
 
     @OneToMany
-    private Set<Certificate> certificates;
+    private Set<CertificateEntity> certificates;
 
-    public Ship() {
+    public ShipEntity() {
     }
 
     public String getName() {
@@ -76,19 +76,19 @@ public class Ship extends BaseEntity{
         this.additionalInfo = additionalInfo;
     }
 
-    public Set<User> getCrew() {
+    public Set<UserEntity> getCrew() {
         return crew;
     }
 
-    public void setCrew(Set<User> crew) {
+    public void setCrew(Set<UserEntity> crew) {
         this.crew = crew;
     }
 
-    public Set<Certificate> getCertificates() {
+    public Set<CertificateEntity> getCertificates() {
         return certificates;
     }
 
-    public void setCertificates(Set<Certificate> certificates) {
+    public void setCertificates(Set<CertificateEntity> certificates) {
         this.certificates = certificates;
     }
 }

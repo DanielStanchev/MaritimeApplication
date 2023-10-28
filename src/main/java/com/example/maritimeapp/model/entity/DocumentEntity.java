@@ -13,7 +13,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "documents")
-public class Document extends BaseEntity {
+public class DocumentEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private DocumentTypeEnum type;
@@ -25,9 +25,9 @@ public class Document extends BaseEntity {
     private LocalDate expiryDate;
 
     @ManyToOne
-    private User userDocuments;
+    private UserEntity userDocuments;
 
-    public Document() {
+    public DocumentEntity() {
     }
 
     public DocumentTypeEnum getType() {
@@ -54,11 +54,11 @@ public class Document extends BaseEntity {
         this.expiryDate = expiryDate;
     }
 
-    public User getUserDocuments() {
+    public UserEntity getUserDocuments() {
         return userDocuments;
     }
 
-    public void setUserDocuments(User userDocuments) {
+    public void setUserDocuments(UserEntity userDocuments) {
         this.userDocuments = userDocuments;
     }
 }

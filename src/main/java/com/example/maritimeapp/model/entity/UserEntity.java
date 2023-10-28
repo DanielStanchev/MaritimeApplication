@@ -6,21 +6,27 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import org.springframework.context.annotation.Lazy;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class UserEntity extends BaseEntity{
 
     @Column(name = "username")
     private String username;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
 
     @Column(name = "password")
     private String password;
@@ -34,17 +40,16 @@ public class User extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private PositionEnum position;
 
-    @ManyToMany(mappedBy = "userRoles")
-    @Lazy
-    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<RoleEntity> roles;
 
     @OneToMany
-    private Set<Document> documents;
+    private Set<DocumentEntity> documents;
 
     @ManyToOne
-    private Contract contract;
+    private ContractEntity contract;
 
-    public User() {
+    public UserEntity() {
     }
 
     public String getUsername() {
@@ -87,27 +92,43 @@ public class User extends BaseEntity{
         this.position = position;
     }
 
-    public Set<Role> getRoles() {
+    public Set<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
 
-    public Set<Document> getDocuments() {
+    public Set<DocumentEntity> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Set<Document> documents) {
+    public void setDocuments(Set<DocumentEntity> documents) {
         this.documents = documents;
     }
 
-    public Contract getContract() {
+    public ContractEntity getContract() {
         return contract;
     }
 
-    public void setContract(Contract contract) {
+    public void setContract(ContractEntity contract) {
         this.contract = contract;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

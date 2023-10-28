@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "contracts")
-public class Contract extends BaseEntity{
+public class ContractEntity extends BaseEntity{
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -20,7 +20,7 @@ public class Contract extends BaseEntity{
     @Column(name = "salary")
     private BigDecimal salary;
 
-    public Contract() {
+    public ContractEntity() {
     }
 
     public LocalDate getStartDate() {

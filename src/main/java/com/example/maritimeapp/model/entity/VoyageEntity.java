@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "voyages")
-public class Voyage extends BaseEntity{
+public class VoyageEntity extends BaseEntity{
 
     @Column(name = "loading_port")
     private String loadingPort;
@@ -24,12 +24,12 @@ public class Voyage extends BaseEntity{
     private LocalDateTime redeliveryDate;
 
     @ManyToOne
-    private Ship ship;
+    private ShipEntity ship;
 
     @ManyToOne
-    private Cargo cargo;
+    private CargoEntity cargo;
 
-    public Voyage() {
+    public VoyageEntity() {
     }
 
     public String getLoadingPort() {
@@ -64,19 +64,19 @@ public class Voyage extends BaseEntity{
         this.redeliveryDate = redeliveryDate;
     }
 
-    public Ship getShip() {
+    public ShipEntity getShip() {
         return ship;
     }
 
-    public void setShip(Ship ship) {
+    public void setShip(ShipEntity ship) {
         this.ship = ship;
     }
 
-    public Cargo getCargo() {
+    public CargoEntity getCargo() {
         return cargo;
     }
 
-    public void setCargo(Cargo cargo) {
+    public void setCargo(CargoEntity cargo) {
         this.cargo = cargo;
     }
 }

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "certificates")
-public class Certificate extends BaseEntity{
+public class CertificateEntity extends BaseEntity{
 
     @Column(name = "name")
     private String name;
@@ -22,7 +22,7 @@ public class Certificate extends BaseEntity{
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
-    public Certificate() {
+    public CertificateEntity() {
     }
 
     public String getName() {

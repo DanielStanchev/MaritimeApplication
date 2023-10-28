@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "cargoes")
-public class Cargo extends BaseEntity{
+public class CargoEntity extends BaseEntity{
 
     @Enumerated(EnumType.STRING)
     private CargoTypeEnum type;
@@ -25,9 +25,9 @@ public class Cargo extends BaseEntity{
     private Integer stowageFactor;
 
     @OneToMany
-    private Set<Voyage> voyages;
+    private Set<VoyageEntity> voyages;
 
-    public Cargo() {
+    public CargoEntity() {
     }
 
     public CargoTypeEnum getType() {
@@ -54,11 +54,11 @@ public class Cargo extends BaseEntity{
         this.stowageFactor = stowageFactor;
     }
 
-    public Set<Voyage> getVoyages() {
+    public Set<VoyageEntity> getVoyages() {
         return voyages;
     }
 
-    public void setVoyages(Set<Voyage> voyages) {
+    public void setVoyages(Set<VoyageEntity> voyages) {
         this.voyages = voyages;
     }
 }
