@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/users")
-public class USerRegisterController {
+public class UserRegisterController {
 
     @GetMapping("/register")
     public String register(){

@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/commons::head}">
 </head>
 
@@ -14,7 +12,7 @@
         <div class="container text-light ">
             <h1 class="display-3">
                 <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">Login</strong></h1>
-            <h3 class="mt-5 text-center"><strong class="bg-blur rounded border-white pl-3 border-bottom">Enter valid
+            <h3 class="mt-5 text-center" ><strong class="bg-blur rounded border-white pl-3 border-bottom" >Enter valid
                 username and
                 password</strong>
             </h3>
@@ -25,7 +23,7 @@
                   class="text-center text-light">
 
                 <h3  class="mt-5 text-center">
-                    <strong class="bg-blur rounded text-danger">
+                    <strong class="bg-blur rounded text-danger" th:if="${bad_credentials}">
                         Wrong username and password combination.
                     </strong>
                 </h3>

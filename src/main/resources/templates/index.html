@@ -17,7 +17,17 @@
         <div class="container text-dark text-center">
             <h1 class="display-3"><strong class="rounded">Welcome to</strong></h1>
             <h1 class="display-3"><strong class="rounded">Daniel's</strong></h1>
-            <h1 class="display-3"><strong class="rounded">Maritime Application</strong></h1>
+            <h1 class="display-3"><strong class="rounded">Maritime Application,</strong></h1>
+
+            <h1 class="display-3"><strong class="rounded">
+                <th:block sec:authorize="isAuthenticated()">
+                <th:block sec:authentication="name"> </th:block>
+                </th:block>
+                <th:block sec:authorize="!isAuthenticated()">
+                    Anonymous!
+                </th:block>
+            </strong></h1>
+
         </div>
     </div>
     <div class="container">

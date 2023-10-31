@@ -2,14 +2,14 @@ package com.example.maritimeapp.model.entity;
 
 
 import com.example.maritimeapp.model.entity.enums.RoleEnum;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
 @Entity
-@Table(name = "users")
+@Table(name = "roles")
 public class RoleEntity extends BaseEntity{
 
     @Enumerated(EnumType.STRING)

@@ -2,18 +2,19 @@ package com.example.maritimeapp.model.entity;
 
 
 import com.example.maritimeapp.model.entity.enums.CargoTypeEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
 @Table(name = "cargoes")
-public class CargoEntity extends BaseEntity{
+public class CargoEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private CargoTypeEnum type;
@@ -24,7 +25,7 @@ public class CargoEntity extends BaseEntity{
     @Column(name = "stowage_factor")
     private Integer stowageFactor;
 
-    @OneToMany
+    @OneToMany(mappedBy = "cargo")
     private Set<VoyageEntity> voyages;
 
     public CargoEntity() {

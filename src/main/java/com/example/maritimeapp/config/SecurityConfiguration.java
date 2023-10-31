@@ -24,10 +24,10 @@ public class SecurityConfiguration {
                 // All static resources which are situated in js, images, css are available for anyone
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 // Allow anyone to see the home page, the registration page and the login form
-                .requestMatchers("/", "/users/login", "/users/register", "/users/login-error").permitAll()
+                .antMatchers("/", "/users/login", "/users/register", "/users/login-error").permitAll()
                 //TODO : replace offers and brands !
-                .requestMatchers("/offers/all").permitAll()
-                .requestMatchers("/brands").hasRole(RoleEnum.ADMIN.name())
+                .antMatchers("/offers/all").permitAll()
+                .antMatchers("/brands").hasRole(RoleEnum.ADMIN.name())
                 // all other requests are authenticated.
                 .anyRequest().authenticated()
         ).formLogin(
@@ -60,7 +60,7 @@ public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return Pbkdf2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+        return new Pbkdf2PasswordEncoder();
     }
 
 }

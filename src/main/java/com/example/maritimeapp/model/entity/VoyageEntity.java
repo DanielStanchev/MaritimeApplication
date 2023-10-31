@@ -1,15 +1,16 @@
 package com.example.maritimeapp.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "voyages")
-public class VoyageEntity extends BaseEntity{
+public class VoyageEntity extends BaseEntity {
 
     @Column(name = "loading_port")
     private String loadingPort;
@@ -18,15 +19,16 @@ public class VoyageEntity extends BaseEntity{
     private String dischargingPort;
 
     @Column(name = "delivery_date")
-    private LocalDateTime deliveryDate;
+    private LocalDate deliveryDate;
 
     @Column(name = "redelivery_date")
-    private LocalDateTime redeliveryDate;
+    private LocalDate redeliveryDate;
 
     @ManyToOne
     private ShipEntity ship;
 
     @ManyToOne
+    @JoinColumn(name = "cargo_id")
     private CargoEntity cargo;
 
     public VoyageEntity() {
@@ -48,19 +50,19 @@ public class VoyageEntity extends BaseEntity{
         this.dischargingPort = dischargingPort;
     }
 
-    public LocalDateTime getDeliveryDate() {
+    public LocalDate getDeliveryDate() {
         return deliveryDate;
     }
 
-    public void setDeliveryDate(LocalDateTime deliveryDate) {
+    public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
 
-    public LocalDateTime getRedeliveryDate() {
+    public LocalDate getRedeliveryDate() {
         return redeliveryDate;
     }
 
-    public void setRedeliveryDate(LocalDateTime redeliveryDate) {
+    public void setRedeliveryDate(LocalDate redeliveryDate) {
         this.redeliveryDate = redeliveryDate;
     }
 
