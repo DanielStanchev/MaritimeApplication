@@ -18,10 +18,10 @@ public class DocumentEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private DocumentTypeEnum type;
 
-    @Column(name = "desctiption", columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "expity_date")
+    @Column(name = "expiry_date")
     private LocalDate expiryDate;
 
     @ManyToOne

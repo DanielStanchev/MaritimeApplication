@@ -15,28 +15,29 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 public class UserEntity extends BaseEntity{
 
-    @Column(name = "username")
+    @Column(name = "username",unique = true,nullable = false)
     private String username;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name",nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name",nullable = false)
     private String lastName;
 
-    @Column(name = "password")
+    @Column(name = "password",nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email",unique = true,nullable = false)
     private String email;
 
-    @Column(name = "registry_date")
+    @Column(name = "registry_date",nullable = false)
     private LocalDateTime registryDate;
 
     @Enumerated(EnumType.STRING)
@@ -47,7 +48,7 @@ public class UserEntity extends BaseEntity{
         name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleEntity> roles;
+    private List<RoleEntity> roles;
 
     @OneToMany
     private Set<DocumentEntity> documents;
@@ -98,11 +99,11 @@ public class UserEntity extends BaseEntity{
         this.position = position;
     }
 
-    public Set<RoleEntity> getRoles() {
+    public List<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<RoleEntity> roles) {
+    public void setRoles(List<RoleEntity> roles) {
         this.roles = roles;
     }
 

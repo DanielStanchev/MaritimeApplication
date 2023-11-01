@@ -27,7 +27,7 @@ public class ShipEntity extends BaseEntity{
     private String additionalInfo;
 
     @OneToMany
-    private Set<UserEntity> crew;
+    private Set<UserEntity> crewMember;
 
     @OneToMany
     private Set<CertificateEntity> certificates;
@@ -75,12 +75,12 @@ public class ShipEntity extends BaseEntity{
         this.additionalInfo = additionalInfo;
     }
 
-    public Set<UserEntity> getCrew() {
-        return crew;
+    public Set<UserEntity> getCrewMember() {
+        return crewMember;
     }
 
-    public void setCrew(Set<UserEntity> crew) {
-        this.crew = crew;
+    public void setCrewMember(Set<UserEntity> crew) {
+        this.crewMember = crew;
     }
 
     public Set<CertificateEntity> getCertificates() {
