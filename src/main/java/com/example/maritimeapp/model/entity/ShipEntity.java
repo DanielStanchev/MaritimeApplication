@@ -13,16 +13,16 @@ import java.util.Set;
 @Table(name = "ships")
 public class ShipEntity extends BaseEntity{
 
-    @Column(name = "name")
+    @Column(name = "name",nullable = false,unique = true)
     private String name;
 
-    @Column(name = "flag")
+    @Column(name = "flag",nullable = false)
     private String flag;
 
-    @Column(name = "capacity")
+    @Column(name = "capacity",nullable = false)
     private Integer capacity;
 
-    @Column(name = "registry_date")
+    @Column(name = "registry_date",nullable = false)
     private LocalDate registryDate;
 
     @Column(name = "additional_info",columnDefinition = "TEXT")

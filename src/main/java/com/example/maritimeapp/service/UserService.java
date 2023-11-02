@@ -11,4 +11,5 @@ public interface UserService {
 
     void initAdmin();
 
+    UserEntity findUserByUserName(String username);
 }

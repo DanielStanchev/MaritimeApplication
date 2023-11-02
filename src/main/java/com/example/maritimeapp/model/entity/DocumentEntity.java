@@ -9,6 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -16,10 +17,14 @@ import java.time.LocalDate;
 public class DocumentEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private DocumentTypeEnum type;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @Column(name = "issue_date")
+    private LocalDate issueDate;
 
     @Column(name = "expiry_date")
     private LocalDate expiryDate;
@@ -60,5 +65,13 @@ public class DocumentEntity extends BaseEntity {
 
     public void setPossessor(UserEntity userDocuments) {
         this.possessor = userDocuments;
+    }
+
+    public LocalDate getIssueDate() {
+        return issueDate;
+    }
+
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
     }
 }

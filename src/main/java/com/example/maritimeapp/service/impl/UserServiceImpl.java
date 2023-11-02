@@ -66,6 +66,12 @@ public class UserServiceImpl implements UserService {
         initAdminWithStartOfApp();
     }
 
+    @Override
+    public UserEntity findUserByUserName(String username) {
+
+        return userRepository.findUserByUsername(username).orElse(null);
+    }
+
     private void initAdminWithStartOfApp() {
         if (userRepository.count() != 0) {
             return;

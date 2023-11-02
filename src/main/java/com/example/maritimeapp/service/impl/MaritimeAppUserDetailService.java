@@ -26,7 +26,7 @@ public class MaritimeAppUserDetailService implements UserDetailsService {
     }
 
     private static UserDetails map(UserEntity userEntity) {
-        return User.withUsername(userEntity.getEmail())
+        return User.withUsername(userEntity.getUsername())
             .password(userEntity.getPassword())
             .authorities(userEntity.getRoles()
                              .stream()
