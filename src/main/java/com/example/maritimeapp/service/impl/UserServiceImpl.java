@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 
 @Service
@@ -31,7 +32,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String register(UserRegisterDto userRegisterDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
         if (bindingResult.hasErrors() || !userRegisterDto.getPassword()
             .equals(userRegisterDto.getConfirmPassword())) {
 
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             userToSave.setPosition(userRegisterDto.getPosition());
             userToSave.setRoles(roleService.findAll()
                                     .stream()
-                                    .filter(r -> r.getRole() != RoleEnum.ADMIN)
+                                    .filter(r -> r.getRole().equals(RoleEnum.USER))
                                     .toList());
 
             userRepository.save(userToSave);
@@ -58,6 +58,32 @@ public class UserServiceImpl implements UserService {
         }
 
         return "redirect:register";
+    }
+
+    @Override
+    @PostConstruct
+    public void initAdmin() {
+        initAdminWithStartOfApp();
+    }
+
+    private void initAdminWithStartOfApp() {
+        if (userRepository.count() != 0) {
+            return;
+        }
+
+        UserEntity userAdmin = new UserEntity();
+        userAdmin.setUsername("Daniel");
+        userAdmin.setFirstName("Daniel");
+        userAdmin.setLastName("Stanchev");
+        userAdmin.setEmail("daniel@daniel");
+        userAdmin.setPassword(passwordEncoder.encode("daniel"));
+        userAdmin.setRoles(roleService.findAll()
+                               .stream()
+                               .filter(r -> r.getRole().equals(RoleEnum.ADMIN))
+                               .toList());
+        userAdmin.setRegistryDate(LocalDateTime.now());
+
+        userRepository.save(userAdmin);
     }
 
 

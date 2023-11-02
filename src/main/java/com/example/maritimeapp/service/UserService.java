@@ -9,4 +9,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public interface UserService {
     String register(UserRegisterDto userRegisterDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
+    void initAdmin();
+
 }

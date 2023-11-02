@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}">
+</head>
+
+<body class="bg-secondary">
+<header th:replace="~{fragments/commons::nav}">
+
+</header>
+<main role="main" class="bg-secondary">
+
+    <div class="jumbotron">
+        <div class="container text-light ">
+            <h1 class="display-3 ">
+                <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">Add
+                    Ship</strong></h1>
+        </div>
+        <div class="container bg-blur rounded p-5 mt-5 w-75">
+            <form th:action="@{/ships/add}" th:method="POST" th:object="${shipAddDto}"
+                  class=" text-center text-light">
+                <div class="form-group row">
+                    <label for="name" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{name}" th:errorclass="is-invalid" type="text"
+                               class="form-control" id="name"
+                               aria-describedby="nameHelpInline" placeholder="Name">
+                        <small id="nameHelpInline"
+                               class="invalid-feedback bg-danger text-light rounded">
+                            Name must be between 1 and 30 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="flag" class="col-sm-2 col-form-label">Flag</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{flag}" th:errorclass="is-invalid" type="text"
+                               class="form-control" id="flag"
+                               aria-describedby="flagHelpInline" placeholder="Flag">
+                        <small id="flagHelpInline"
+                               class="invalid-feedback bg-danger text-light rounded">
+                            Flag must be between 2 and 20 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="capacity" class="col-sm-2 col-form-label">Capacity</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{capacity}" th:errorclass="is-invalid" type="number"
+                               step="1" class="form-control" id="capacity"
+                               aria-describedby="capacityHelpInline" placeholder="Capacity">
+                        <small id="capacityHelpInline"
+                               class="invalid-feedback bg-danger text-light rounded">
+                            Capacity must be positive.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="registryDate" class="col-sm-2 col-form-label">Registry data</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{registryDate}" th:errorclass="is-invalid"
+                               type="date" class="form-control" id="registryDate"
+                               aria-describedby="registryDateTimeHelpInline">
+                        <small id="registryDateTimeHelpInline"
+                               class="invalid-feedback bg-danger text-light rounded">
+                            Must enter registry date which cannot be in the future.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="additionalInfo" class="col-sm-2 col-form-label">Additional
+                        info</label>
+                    <div class="col-sm-10">
+                    <textarea th:field="*{additionalInfo}" class="form-control" id="additionalInfo"
+                              aria-describedby="additionalInfoHelpInline"
+                              placeholder="Additional Info">
+                    </textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-info w-50">Add ship</button>
+            </form>
+            <hr class="bg-light">
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/commons::footer}">
+
+</footer>
+</body>
+</html>

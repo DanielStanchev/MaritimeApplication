@@ -8,5 +8,5 @@ public interface RoleService {
 
     List<RoleEntity> findAll();
 
-    void initRoles();
+    void init();
 }

@@ -1,33 +1,35 @@
-package com.example.maritimeapp.model.entity;
+package com.example.maritimeapp.model.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import com.example.maritimeapp.model.entity.ShipEntity;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "certificates")
-public class CertificateEntity extends BaseEntity{
+public class CertificateAddDto {
 
-    @Column(name = "name",nullable = false)
+    @Size(min = 2, max = 50)
     private String name;
 
-    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "start_date",nullable = false)
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @PastOrPresent
     private LocalDate startDate;
 
-    @Column(name = "expiry_date",nullable = false)
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent
     private LocalDate expiryDate;
 
-    @ManyToOne
-    private ShipEntity ship;
+    @NotNull
+    private String shipName;
 
-    public CertificateEntity() {
+    public CertificateAddDto() {
     }
 
     public String getName() {
@@ -62,11 +64,11 @@ public class CertificateEntity extends BaseEntity{
         this.expiryDate = expiryDate;
     }
 
-    public ShipEntity getShip() {
-        return ship;
+    public String getShipName() {
+        return shipName;
     }
 
-    public void setShip(ShipEntity ship) {
-        this.ship = ship;
+    public void setShipName(String shipName) {
+        this.shipName = shipName;
     }
 }

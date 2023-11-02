@@ -50,11 +50,14 @@ public class UserEntity extends BaseEntity{
         inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<RoleEntity> roles;
 
-    @OneToMany
+    @OneToMany(mappedBy = "possessor")
     private Set<DocumentEntity> documents;
 
     @ManyToOne
     private ContractEntity contract;
+
+    @ManyToOne
+    private ShipEntity userShip;
 
     public UserEntity() {
     }
@@ -137,5 +140,13 @@ public class UserEntity extends BaseEntity{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public ShipEntity getUserShip() {
+        return userShip;
+    }
+
+    public void setUserShip(ShipEntity ship) {
+        this.userShip = ship;
     }
 }

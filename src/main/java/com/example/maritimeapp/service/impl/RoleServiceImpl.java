@@ -6,6 +6,7 @@ import com.example.maritimeapp.repository.RoleRepository;
 import com.example.maritimeapp.service.RoleService;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,11 @@ public class RoleServiceImpl implements RoleService {
 
     public RoleServiceImpl(RoleRepository roleRepository) {this.roleRepository = roleRepository;}
 
+    @Override
+    @PostConstruct
+    public void init() {
+        initRoles();
+    }
 
 
     @Override
@@ -25,9 +31,9 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
-    @Override
-    public void initRoles() {
-        if (roleRepository.count()!=0) {
+
+    private void initRoles() {
+        if (roleRepository.count() != 0) {
             return;
         }
 
@@ -38,6 +44,5 @@ public class RoleServiceImpl implements RoleService {
 
                 roleRepository.save(role);
             });
-
     }
 }

@@ -1,6 +1,5 @@
 package com.example.maritimeapp.config;
 
-import com.example.maritimeapp.model.entity.enums.RoleEnum;
 import com.example.maritimeapp.repository.UserRepository;
 import com.example.maritimeapp.service.impl.MaritimeAppUserDetailService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;

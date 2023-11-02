@@ -2,9 +2,11 @@ package com.example.maritimeapp.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -26,11 +28,11 @@ public class ShipEntity extends BaseEntity{
     @Column(name = "additional_info",columnDefinition = "TEXT")
     private String additionalInfo;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "userShip")
     private Set<UserEntity> crewMember;
 
-    @OneToMany
-    private Set<CertificateEntity> certificates;
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "ship")
+    private Set<CertificateEntity> certificates = new HashSet<>();
 
     public ShipEntity() {
     }

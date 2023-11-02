@@ -1,4 +1,4 @@
-package com.example.maritimeapp.model.constants;
+package com.example.maritimeapp.constants;
 
 public class Role {
     public final static String ADMIN = "ROLE_ADMIN";
