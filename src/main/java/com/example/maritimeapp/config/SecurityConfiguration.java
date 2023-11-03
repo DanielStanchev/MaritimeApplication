@@ -26,7 +26,7 @@ public class SecurityConfiguration {
                                          .atCommonLocations())
                     .permitAll()
                     // Allow anyone to see the home page, the registration page and the login form
-                    .antMatchers("/", "/users/login", "/users/register", "/users/login-error")
+                    .antMatchers("/", "/users/login", "/users/register")
                     .permitAll()
                     // all other requests are authenticated.
                     .anyRequest()
@@ -39,7 +39,8 @@ public class SecurityConfiguration {
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
                 .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
                 .defaultSuccessUrl("/")
-                .failureForwardUrl("/users/login-error"))
+                .failureForwardUrl("/users/login-error")
+            )
             .logout(logout -> logout
                 // the URL where we should POST something in order to perform the logout
                 .logoutUrl("/users/logout")

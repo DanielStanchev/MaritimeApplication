@@ -7,7 +7,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-public class ShipAddDto {
+public class ShipDto {
+
+    private Long id;
 
     @Size(min = 1,max = 30)
     private String name;
@@ -26,7 +28,15 @@ public class ShipAddDto {
 
     private String additionalInfo;
 
-    public ShipAddDto() {
+    public ShipDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
