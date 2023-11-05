@@ -9,10 +9,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
-public class DocumentAddDto {
+public class DocumentDto {
+
+    private Long id;
 
     @NotNull
-    private DocumentTypeEnum document;
+    private DocumentTypeEnum documentType;
 
     private String description;
 
@@ -28,15 +30,15 @@ public class DocumentAddDto {
 
     private UserEntity possessor;
 
-    public DocumentAddDto() {
+    public DocumentDto() {
     }
 
-    public DocumentTypeEnum getDocument() {
-        return document;
+    public DocumentTypeEnum getDocumentType() {
+        return documentType;
     }
 
-    public void setDocument(DocumentTypeEnum document) {
-        this.document = document;
+    public void setDocumentType(DocumentTypeEnum documentType) {
+        this.documentType = documentType;
     }
 
     public String getDescription() {
@@ -69,5 +71,13 @@ public class DocumentAddDto {
 
     public void setPossessor(UserEntity possessor) {
         this.possessor = possessor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
