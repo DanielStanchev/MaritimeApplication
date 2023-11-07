@@ -17,7 +17,7 @@
         </div>
 
         <div class="container bg-blur rounded p-5 mt-5 w-75">
-            <form th:action="@{/certificates/add}" th:method="POST" th:object="${certificateAddDto}"
+            <form th:action="@{/certificates/add}" th:method="POST" th:object="${certificateDto}"
                   class=" text-center text-light">
                 <div class="form-group row">
                     <label for="name" class="col-sm-2 col-form-label">Name</label>
@@ -38,16 +38,21 @@
                     </div>
                 </div>
 
+
                 <div class="form-group row">
                     <label for="ship" class="col-sm-2 col-form-label">Ship name</label>
                     <div class="col-sm-10">
-                        <input th:field="*{shipName}" th:errorclass="is-invalid" type="text" class="form-control" id="ship"
-                               aria-describedby="shipHelpInline" placeholder="Ship name">
-                        <small id="shipHelpInline" class="invalid-feedback bg-danger text-light rounded">
-                            Enter valid Ship name !
+                        <select th:field="*{ship.name}" th:errorclass="is-invalid" id="ship" name="ship" class="custom-select"
+                                aria-describedby="shipTypeHelpInline">
+                            <option value="" selected>Ship name</option>
+                            <option th:each="s : ${ships}" th:value="${s.name}" th:text="${s.name}"></option>
+                        </select>
+                        <small id="shipTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                            You must select ship.
                         </small>
                     </div>
                 </div>
+
 
                 <div class="form-group row">
                     <label for="startDate" class="col-sm-2 col-form-label">Start date</label>

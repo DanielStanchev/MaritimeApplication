@@ -1,6 +1,5 @@
 package com.example.maritimeapp.model.dto;
 
-import com.example.maritimeapp.model.entity.ShipEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -9,7 +8,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-public class CertificateAddDto {
+public class CertificateDto {
 
     @Size(min = 2, max = 50)
     private String name;
@@ -27,9 +26,9 @@ public class CertificateAddDto {
     private LocalDate expiryDate;
 
     @NotNull
-    private String shipName;
+    private ShipDto ship;
 
-    public CertificateAddDto() {
+    public CertificateDto() {
     }
 
     public String getName() {
@@ -64,11 +63,11 @@ public class CertificateAddDto {
         this.expiryDate = expiryDate;
     }
 
-    public String getShipName() {
-        return shipName;
+    public ShipDto getShip() {
+        return ship;
     }
 
-    public void setShipName(String shipName) {
-        this.shipName = shipName;
+    public void setShip(ShipDto ship) {
+        this.ship = ship;
     }
 }

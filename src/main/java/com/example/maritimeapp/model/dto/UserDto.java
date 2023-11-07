@@ -6,7 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class UserRegisterDto {
+public class UserDto {
 
     @Size(min = 3,max = 20)
     private String username;
@@ -29,7 +29,7 @@ public class UserRegisterDto {
     @NotNull
     private PositionEnum position;
 
-    public UserRegisterDto() {
+    public UserDto() {
     }
 
     public String getUsername() {

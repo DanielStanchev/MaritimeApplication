@@ -1,6 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.CertificateAddDto;
+import com.example.maritimeapp.model.dto.CertificateDto;
 import com.example.maritimeapp.model.entity.CertificateEntity;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.repository.CertificateRepository;
@@ -27,21 +27,22 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public String addCertificate(CertificateAddDto certificateAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addCertificate(CertificateDto certificateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("certificateAddDto", certificateAddDto);
+            redirectAttributes.addFlashAttribute("certificateAddDto", certificateDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.certificateAddDto", bindingResult);
 
             return "redirect:add";
         }
 
-        CertificateEntity certificateToSave = modelMapper.map(certificateAddDto, CertificateEntity.class);
+        CertificateEntity certificateToSave = modelMapper.map(certificateDto, CertificateEntity.class);
 
-        ShipEntity currentShip = shipService.findShipByShipName(certificateAddDto.getShipName());
+        ShipEntity currentShip = shipService.findShipByShipName(certificateDto.getShip().getName());
 
         Set<CertificateEntity> certificates = currentShip.getCertificates();
-        certificateToSave.setShip(currentShip);
         certificates.add(certificateToSave);
+
+        certificateToSave.setShip(currentShip);
 
         certificateRepository.save(certificateToSave);
 

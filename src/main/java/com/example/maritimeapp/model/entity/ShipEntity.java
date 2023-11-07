@@ -34,6 +34,9 @@ public class ShipEntity extends BaseEntity{
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "ship")
     private Set<CertificateEntity> certificates = new HashSet<>();
 
+    @OneToMany(mappedBy = "ship",fetch = FetchType.EAGER)
+    private Set<ContractEntity> contracts;
+
     public ShipEntity() {
     }
 
@@ -91,5 +94,13 @@ public class ShipEntity extends BaseEntity{
 
     public void setCertificates(Set<CertificateEntity> certificates) {
         this.certificates = certificates;
+    }
+
+    public Set<ContractEntity> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(Set<ContractEntity> contracts) {
+        this.contracts = contracts;
     }
 }

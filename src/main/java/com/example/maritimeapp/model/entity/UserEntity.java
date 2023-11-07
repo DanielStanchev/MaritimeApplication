@@ -53,8 +53,8 @@ public class UserEntity extends BaseEntity{
     @OneToMany(mappedBy = "possessor")
     private Set<DocumentEntity> documents;
 
-    @ManyToOne
-    private ContractEntity contract;
+    @OneToMany(mappedBy = "possessor",fetch = FetchType.EAGER)
+    private Set<ContractEntity> contracts;
 
     @ManyToOne
     private ShipEntity userShip;
@@ -118,14 +118,6 @@ public class UserEntity extends BaseEntity{
         this.documents = documents;
     }
 
-    public ContractEntity getContract() {
-        return contract;
-    }
-
-    public void setContract(ContractEntity contract) {
-        this.contract = contract;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -148,5 +140,13 @@ public class UserEntity extends BaseEntity{
 
     public void setUserShip(ShipEntity ship) {
         this.userShip = ship;
+    }
+
+    public Set<ContractEntity> getContracts() {
+        return contracts;
+    }
+
+    public void setContracts(Set<ContractEntity> contract) {
+        this.contracts = contract;
     }
 }

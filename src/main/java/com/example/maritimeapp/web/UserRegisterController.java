@@ -1,6 +1,6 @@
 package com.example.maritimeapp.web;
 
-import com.example.maritimeapp.model.dto.UserRegisterDto;
+import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,14 +28,14 @@ public class UserRegisterController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid UserRegisterDto userRegisterDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String register(@Valid UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        return userService.register(userRegisterDto, bindingResult, redirectAttributes);
+        return userService.register(userDto, bindingResult, redirectAttributes);
     }
 
     @ModelAttribute
-    UserRegisterDto userRegisterDto() {
-        return new UserRegisterDto();
+    UserDto userRegisterDto() {
+        return new UserDto();
     }
 
 }

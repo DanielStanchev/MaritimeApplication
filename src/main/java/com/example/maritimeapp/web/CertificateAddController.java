@@ -1,10 +1,12 @@
 package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
-import com.example.maritimeapp.model.dto.CertificateAddDto;
+import com.example.maritimeapp.model.dto.CertificateDto;
 import com.example.maritimeapp.service.CertificateService;
+import com.example.maritimeapp.service.ShipService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,24 +22,32 @@ import javax.validation.Valid;
 public class CertificateAddController {
 
     private final CertificateService certificateService;
+    private final ShipService shipService;
 
-    public CertificateAddController(CertificateService certificateService) {this.certificateService = certificateService;}
+    public CertificateAddController(CertificateService certificateService, ShipService shipService) {
+        this.certificateService = certificateService;
+        this.shipService = shipService;
+    }
 
 
     @GetMapping("/add")
-    public String addCertificate(){
+    public String addCertificate(Model model) {
+
+        model.addAttribute("ships", shipService.getShips());
+
         return "certificate-add";
     }
 
     @PostMapping("/add")
-    public String addCertificateConfirm(@Valid CertificateAddDto certificateAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addCertificateConfirm(@Valid CertificateDto certificateDto, BindingResult bindingResult,
+                                        RedirectAttributes redirectAttributes) {
 
-        return certificateService.addCertificate(certificateAddDto, bindingResult, redirectAttributes);
+        return certificateService.addCertificate(certificateDto, bindingResult, redirectAttributes);
     }
 
     @ModelAttribute
-    public CertificateAddDto certificateAddDto() {
-        return new CertificateAddDto();
+    public CertificateDto certificateAddDto() {
+        return new CertificateDto();
     }
 
 }

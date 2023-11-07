@@ -2,7 +2,6 @@ package com.example.maritimeapp.service.impl;
 
 import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
-import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
 import com.example.maritimeapp.repository.DocumentRepository;
@@ -46,9 +45,7 @@ public class DocumentServiceImpl implements DocumentService {
 
         documentToSave.setType(documentDto.getDocumentType());
 
-        User loggedInUser = (User) SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getPrincipal();
+        User loggedInUser = getLoggedInUserFromSecurityContext();
         UserEntity possessor = userService.findUserByUserName(loggedInUser.getUsername());
         documentToSave.setPossessor(possessor);
 
@@ -76,9 +73,8 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public List<DocumentDto> getDocuments() {
 
-        User loggedInUser = (User) SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getPrincipal();
+        User loggedInUser = getLoggedInUserFromSecurityContext();
+
         UserEntity possessor = userService.findUserByUserName(loggedInUser.getUsername());
 
         return documentRepository.findAllByPossessor(possessor)
@@ -89,6 +85,12 @@ public class DocumentServiceImpl implements DocumentService {
                 return docToShow;
             })
             .toList();
+    }
+
+    private User getLoggedInUserFromSecurityContext() {
+        return (User) SecurityContextHolder.getContext()
+            .getAuthentication()
+            .getPrincipal();
     }
 
     @Override
