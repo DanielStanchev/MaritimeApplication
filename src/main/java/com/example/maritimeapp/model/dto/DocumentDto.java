@@ -28,7 +28,7 @@ public class DocumentDto {
     @FutureOrPresent
     private LocalDate expiryDate;
 
-    private UserEntity possessor;
+    private UserDto possessor;
 
     public DocumentDto() {
     }
@@ -65,11 +65,11 @@ public class DocumentDto {
         this.expiryDate = expiryDate;
     }
 
-    public UserEntity getPossessor() {
+    public UserDto getPossessor() {
         return possessor;
     }
 
-    public void setPossessor(UserEntity possessor) {
+    public void setPossessor(UserDto possessor) {
         this.possessor = possessor;
     }
 

@@ -11,8 +11,9 @@ public interface DocumentService {
 
     void initDocs();
 
-    List<DocumentDto> getDocuments();
+    List<DocumentDto> getDocumentsByUser();
 
     void removeDocument(Long documentId);
 
+    List<DocumentDto> getAllDocuments();
 }

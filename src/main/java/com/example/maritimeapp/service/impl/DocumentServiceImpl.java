@@ -1,6 +1,7 @@
 package com.example.maritimeapp.service.impl;
 
 import com.example.maritimeapp.model.dto.DocumentDto;
+import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,12 +48,13 @@ public class DocumentServiceImpl implements DocumentService {
         documentToSave.setType(documentDto.getDocumentType());
 
         User loggedInUser = getLoggedInUserFromSecurityContext();
-        UserEntity possessor = userService.findUserByUserName(loggedInUser.getUsername());
+        UserEntity possessor = userService.findUserByUsername(loggedInUser.getUsername())
+            .orElse(null);
         documentToSave.setPossessor(possessor);
 
         documentRepository.save(documentToSave);
 
-        return "redirect:/";
+        return "redirect:/documents/show";
     }
 
     @Override
@@ -71,11 +74,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<DocumentDto> getDocuments() {
+    public List<DocumentDto> getDocumentsByUser() {
 
         User loggedInUser = getLoggedInUserFromSecurityContext();
 
-        UserEntity possessor = userService.findUserByUserName(loggedInUser.getUsername());
+        UserEntity possessor = userService.findUserByUsername(loggedInUser.getUsername())
+            .orElse(null);
 
         return documentRepository.findAllByPossessor(possessor)
             .stream()
@@ -100,5 +104,29 @@ public class DocumentServiceImpl implements DocumentService {
             .orElse(null);
 
         documentRepository.delete(document);
+    }
+
+    @Override
+    public List<DocumentDto> getAllDocuments() {
+
+        return documentRepository.findAll()
+            .stream()
+            .skip(2)
+            .map(d -> {
+                UserEntity possessor = userService.findUserByUsername(d.getPossessor()
+                                                                          .getUsername())
+                    .orElse(null);
+
+
+                DocumentDto documentToShow = modelMapper.map(d, DocumentDto.class);
+
+                documentToShow.setDocumentType(d.getType());
+
+                documentToShow.setPossessor(modelMapper.map(possessor, UserDto.class));
+
+                return documentToShow;
+
+            })
+            .toList();
     }
 }

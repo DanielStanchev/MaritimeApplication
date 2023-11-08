@@ -1,8 +1,10 @@
 package com.example.maritimeapp.web;
 
 
+import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.service.DocumentService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +27,7 @@ public class DocumentController {
     public DocumentController(DocumentService documentService) {this.documentService = documentService;}
 
     @GetMapping("/add")
-    public String addDocuments(){
+    public String addDocuments() {
         return "document-add";
     }
 
@@ -38,7 +40,7 @@ public class DocumentController {
     @GetMapping("/show")
     public String allDocuments(Model model) {
 
-        model.addAttribute("documents", documentService.getDocuments());
+        model.addAttribute("documents", documentService.getDocumentsByUser());
 
         return "all-documents";
     }
@@ -50,7 +52,14 @@ public class DocumentController {
         return "redirect:/documents/show";
     }
 
+    @Secured(Role.ADMIN)
+    @GetMapping("/show-all")
+    public String allDocumentsToAdmin(Model model) {
 
+        model.addAttribute("documents", documentService.getAllDocuments());
+
+        return "all-documents-to-admin";
+    }
 
     @ModelAttribute
     public DocumentDto documentAddDto() {

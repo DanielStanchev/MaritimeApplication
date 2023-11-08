@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -70,10 +71,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity findUserByUserName(String username) {
+    public Optional<UserEntity> findUserByUsername(String username) {
 
-        return userRepository.findUserByUsername(username)
-            .orElse(null);
+        return userRepository.findUserByUsername(username);
     }
 
     @Override

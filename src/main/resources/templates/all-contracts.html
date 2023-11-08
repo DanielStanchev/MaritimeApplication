@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}"></head>
+<body class="bg-secondary">
+<header th:replace="~{fragments/commons::nav}"></header>
+<main>
+
+
+    <div class="jumbotron">
+        <div class="container text-light ">
+            <h1 class="display-3 ">
+                <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">All
+                    contracts</strong></h1>
+        </div>
+
+        <!--        <div class="row mt-3 mb-3">-->
+        <div class="container bg-blur rounded p-4 mt-1 w-75">
+            <h3 class="mySticky bg-gray text-light rounded text-center"
+                th:text="|Total contracts: *{contracts.size()}|"></h3>
+            <div class="col-5 bg-dark rounded m-auto" style="height: 80vh; overflow: auto">
+
+                <div th:each="contract : ${contracts}" class="mt-3 rounded badge-warning">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="font-weight-bold">Employee name</td>
+                            <td th:text="|*{contract.employee.getFirstName()} *{contract.employee.getLastName()}|"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Ship name</td>
+                            <td th:text="*{contract.ship.getName()}"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Salary</td>
+                            <td th:text="*{contract.salary}"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Start date</td>
+                            <td th:text="*{contract.startDate}"></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Disembark date</td>
+                            <td th:text="*{contract.disembarkDate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-center mt-2">
+                        <form th:action="@{/contracts/{contractId}/remove(contractId=*{contract.id})}"
+                              th:method="DELETE">
+                            <button type="submit" class="btn btn-info w-50">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-light">
+        </div>
+
+    </div>
+</main>
+<footer th:replace="~{fragments/commons::footer}"></footer>
+</body>
+</html>

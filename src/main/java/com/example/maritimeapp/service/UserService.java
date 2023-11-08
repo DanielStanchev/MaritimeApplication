@@ -6,13 +6,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
     String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     void initAdmin();
 
-    UserEntity findUserByUserName(String username);
+    Optional<UserEntity> findUserByUsername(String username);
 
     List<UserEntity> findAll();
 
