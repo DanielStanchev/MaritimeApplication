@@ -2,6 +2,7 @@ package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ContractDto;
+import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserService;
@@ -12,12 +13,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Controller
 @RequestMapping("/contracts")
@@ -67,12 +71,37 @@ public class ContractController {
     }
 
     @GetMapping("/show-my")
-    public String showContractsByUser(Model model){
+    public String showContractsByUser(Model model) {
 
-        model.addAttribute("contractsByUser",contractService.getContractsByUser());
+        model.addAttribute("contractsByUser", contractService.getContractsByUser());
 
         return "all-contracts-by-user";
     }
+
+    @Secured(Role.ADMIN)
+    @GetMapping("/pay-raise")
+    public String showPayRaisePanel(Model model) {
+
+        model.addAttribute("employees", contractService.getAllContracts());
+        model.addAttribute("totalSalary", contractService.getAllContracts()
+            .stream()
+            .map(ContractDto::getSalary)
+            .reduce(BigDecimal.ZERO, BigDecimal::add));
+
+
+        return "pay-raise";
+    }
+
+
+    @Secured(Role.ADMIN)
+    @PatchMapping("/{contractId}/pay-raise")
+    public String payRaiseToUser(@PathVariable("contractId") Long contractId,
+                                 @RequestParam(value = "bonusAmount", required = false) BigDecimal bonusAmount) {
+        System.out.printf("Bonus Amount %s", bonusAmount);
+        contractService.payRaise(contractId, bonusAmount);
+        return "redirect:/contracts/pay-raise";
+    }
+
 
     @ModelAttribute
     public ContractDto contractDto() {

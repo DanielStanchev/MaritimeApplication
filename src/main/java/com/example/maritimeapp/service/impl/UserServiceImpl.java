@@ -1,8 +1,12 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.ChangePositionDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.UserEntity;
+import com.example.maritimeapp.model.entity.UserHistory;
+import com.example.maritimeapp.model.entity.enums.PositionEnum;
 import com.example.maritimeapp.model.entity.enums.RoleEnum;
+import com.example.maritimeapp.repository.UserHistoryRepository;
 import com.example.maritimeapp.repository.UserRepository;
 import com.example.maritimeapp.service.RoleService;
 import com.example.maritimeapp.service.UserService;
@@ -13,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +30,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final UserHistoryRepository userHistoryRepository;
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService) {
+    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService,
+                           UserHistoryRepository userHistoryRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+        this.userHistoryRepository = userHistoryRepository;
     }
 
     @Override
@@ -102,6 +110,28 @@ public class UserServiceImpl implements UserService {
 
         return employeesToShow;
     }
+
+    @Override
+    public void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position) {
+
+        UserEntity user = userRepository.findById(userId).orElse(null);
+
+        UserHistory changeOfPositionHistory = new UserHistory();
+        changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
+
+
+        user.setPosition(position);
+        userRepository.save(user);
+
+
+        changeOfPositionHistory.setNewPosition(user.getPosition().getDescription());
+        changeOfPositionHistory.setDateOfChange(LocalDate.now());
+        changeOfPositionHistory.setEmployees(user);
+
+        userHistoryRepository.save(changeOfPositionHistory);
+
+    }
+
 
     private void initAdminWithStartOfApp() {
         if (userRepository.count() != 0) {

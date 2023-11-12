@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/commons::head"></head>
+<body class="bg-secondary">
+<header th:replace="fragments/commons::nav"></header>
+<main>
+    <div class="jumbotron">
+        <div class="container text-light">
+            <h1 class="display-3">
+                <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">
+                    Pay raise
+                </strong>
+            </h1>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mt-1 mb-1">
+                <h3 class="mySticky bg-blur text-light mb-0 mt-2">Employee</h3>
+                <h6 class="mySticky bg-blur text-danger mb-0 mt-0"
+                    th:text="|Total salary of employees: ${totalSalary} lv.|"></h6>
+                <div class="bg-dark rounded" style="height: 40vh; overflow: auto">
+                    <div th:each="employee: ${employees}" class="mt-1 rounded badge-info">
+                        <span th:text="|*{employee.employee.getFirstName()} *{employee.employee.getLastName()} / current salary : *{employee.getSalary()} lv.|"></span>
+                        <form th:action="@{/contracts/{contractId}/pay-raise(contractId = ${employee.id})}"
+                              th:method="PATCH">
+
+                            <div class="form-group row">
+                                <label for="bonus" class="col-sm-1 col-form-label">Bonus</label>
+                                <div class="col-sm-5">
+                                    <input th:name="bonusAmount"
+                                           type="number" min="1"
+                                           step="1" class="form-control" id="bonus"
+                                           aria-describedby="bonusHelpInline"
+                                           placeholder="Bonus amount">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="ml-3 text-danger">Add bonus.
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 mt-1 mb-1">
+                <h3 class="mySticky bg-blur text-light mb-0 mt-2">Employees who got a salary
+                    raise</h3>
+
+                <h6 class="mySticky bg-blur text-light mb-0 mt-0"
+                    th:text="|Total sum given: ${totalSum} lv.|"></h6>
+
+                <div class="bg-dark rounded m-auto" style="height: 40vh; overflow: auto">
+                    <table class="table table-striped table-dark">
+                        <tr th:each="e : ${employeesRaised}">
+                            <td th:text="|*{e.employee.firstName} *{e.employee.getLastName()} / new salary: *{e.salary} lv.|"></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <a href="/" class="mt-1 mb-0 btn btn-danger"
+                   th:href="@{/home/remove-all-song-from-playlist}">Remove history</a>
+            </div>
+        </div>
+
+        <hr class="bg-light">
+    </div>
+</main>
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>

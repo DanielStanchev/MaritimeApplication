@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContractRepository extends JpaRepository<ContractEntity,Long> {
+public interface ContractRepository extends JpaRepository<ContractEntity, Long> {
 
     List<ContractEntity> findAllByPossessor(UserEntity employee);
+
 }

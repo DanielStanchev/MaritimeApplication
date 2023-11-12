@@ -19,12 +19,12 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/certificates")
 @Secured(Role.ADMIN)
-public class CertificateAddController {
+public class CertificateController {
 
     private final CertificateService certificateService;
     private final ShipService shipService;
 
-    public CertificateAddController(CertificateService certificateService, ShipService shipService) {
+    public CertificateController(CertificateService certificateService, ShipService shipService) {
         this.certificateService = certificateService;
         this.shipService = shipService;
     }

@@ -2,6 +2,7 @@ package com.example.maritimeapp.service;
 
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.UserEntity;
+import com.example.maritimeapp.model.entity.enums.PositionEnum;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,4 +19,6 @@ public interface UserService {
     List<UserEntity> findAll();
 
     List<UserDto> getAllEmployees();
+
+    void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position);
 }

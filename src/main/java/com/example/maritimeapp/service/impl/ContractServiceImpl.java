@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +49,8 @@ public class ContractServiceImpl implements ContractService {
         ContractEntity contractToSave = modelMapper.map(contractDto, ContractEntity.class);
 
         UserEntity employee = userService.findUserByUsername(contractDto.getEmployee()
-                                                                 .getUsername()).orElse(null);
+                                                                 .getUsername())
+            .orElse(null);
 
         ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
                                                                     .getName());
@@ -77,7 +79,8 @@ public class ContractServiceImpl implements ContractService {
                 ContractDto contractToShow = modelMapper.map(c, ContractDto.class);
 
                 UserEntity possessor = userService.findUserByUsername(c.getPossessor()
-                                                                          .getUsername()).orElse(null);
+                                                                          .getUsername())
+                    .orElse(null);
 
                 ShipEntity ship = shipService.findShipByShipName(c.getShip()
                                                                      .getName());
@@ -104,7 +107,8 @@ public class ContractServiceImpl implements ContractService {
 
         User loggedInUser = getLoggedInUserFromSecurityContext();
 
-        UserEntity employee = userService.findUserByUsername(loggedInUser.getUsername()).orElse(null);
+        UserEntity employee = userService.findUserByUsername(loggedInUser.getUsername())
+            .orElse(null);
 
         return contractRepository.findAllByPossessor(employee)
             .stream()
@@ -117,6 +121,23 @@ public class ContractServiceImpl implements ContractService {
             })
             .toList();
     }
+
+    @Override
+    public void payRaise(Long contractId, BigDecimal bonusAmount) {
+
+        final ContractEntity contract = contractRepository.findById(contractId)
+            .orElse(null);
+
+        if (contract == null) {
+            System.out.println("ERROR: Contract is NULL");
+            return;
+        }
+
+        System.out.printf("INFO: Contract with ID %s salary update from %s to %s", contract.getId(), contract.getSalary(), contract.getSalary().add(bonusAmount));
+        contract.setSalary(contract.getSalary().add(bonusAmount));
+        contractRepository.save(contract);
+    }
+
 
     private User getLoggedInUserFromSecurityContext() {
         return (User) SecurityContextHolder.getContext()

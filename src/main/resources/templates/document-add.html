@@ -24,7 +24,7 @@
                         <select th:field="*{documentType}" th:errorclass="is-invalid" id="documentType" name="documentType" class="custom-select"
                                 aria-describedby="documentTypeHelpInline">
                             <option value="" selected>Document Type</option>
-                            <option th:each="d : ${T(com.example.maritimeapp.model.entity.enums.DocumentTypeEnum).values()}" th:value="${d}" th:text="${d}"></option>
+                            <option th:each="d : ${T(com.example.maritimeapp.model.entity.enums.DocumentTypeEnum).values()}" th:value="${d}" th:text="${d.description}"></option>
                         </select>
                         <small id="documentTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             You must select document.
