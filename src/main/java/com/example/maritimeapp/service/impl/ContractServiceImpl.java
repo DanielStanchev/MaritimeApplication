@@ -6,7 +6,9 @@ import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
+import com.example.maritimeapp.model.entity.UserSalaryHistory;
 import com.example.maritimeapp.repository.ContractRepository;
+import com.example.maritimeapp.repository.UsersSalaryHistoryRepository;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserService;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -29,12 +32,16 @@ public class ContractServiceImpl implements ContractService {
     private final ContractRepository contractRepository;
     private final UserService userService;
     private final ShipService shipService;
+    private final UsersSalaryHistoryRepository usersSalaryHistoryRepository;
 
-    public ContractServiceImpl(ModelMapper modelMapper, ContractRepository contractRepository, UserService userService, ShipService shipService) {
+    public ContractServiceImpl(ModelMapper modelMapper, ContractRepository contractRepository, UserService userService, ShipService shipService,
+                               UsersSalaryHistoryRepository usersSalaryHistoryRepository) {
         this.modelMapper = modelMapper;
         this.contractRepository = contractRepository;
         this.userService = userService;
         this.shipService = shipService;
+
+        this.usersSalaryHistoryRepository = usersSalaryHistoryRepository;
     }
 
     @Override
@@ -123,19 +130,30 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void payRaise(Long contractId, BigDecimal bonusAmount) {
+    public void payRaiseAndKeepHistory(Long contractId, BigDecimal bonusAmount) {
 
         final ContractEntity contract = contractRepository.findById(contractId)
             .orElse(null);
+
+        //UserEntity user = contractRepository.findUserByContactId
+
+        UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
+        changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
 
         if (contract == null) {
             System.out.println("ERROR: Contract is NULL");
             return;
         }
-
         System.out.printf("INFO: Contract with ID %s salary update from %s to %s", contract.getId(), contract.getSalary(), contract.getSalary().add(bonusAmount));
+
         contract.setSalary(contract.getSalary().add(bonusAmount));
         contractRepository.save(contract);
+
+        changeOfSalaryHistory.setNewSalary(contract.getSalary());
+        changeOfSalaryHistory.setDateOfChange(LocalDate.now());
+        changeOfSalaryHistory.setEmployees(contract.getPossessor());
+
+        usersSalaryHistoryRepository.save(changeOfSalaryHistory);
     }
 
 

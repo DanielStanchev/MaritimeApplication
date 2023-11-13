@@ -2,9 +2,9 @@ package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ContractDto;
-import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
+import com.example.maritimeapp.service.UserSalaryHistoryService;
 import com.example.maritimeapp.service.UserService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -30,11 +30,14 @@ public class ContractController {
     private final ContractService contractService;
     private final UserService userService;
     private final ShipService shipService;
+    private final UserSalaryHistoryService userSalaryHistoryService;
 
-    public ContractController(ContractService contractService, UserService userService, ShipService shipService) {
+    public ContractController(ContractService contractService, UserService userService, ShipService shipService,
+                              UserSalaryHistoryService userSalaryHistoryService) {
         this.contractService = contractService;
         this.userService = userService;
         this.shipService = shipService;
+        this.userSalaryHistoryService = userSalaryHistoryService;
     }
 
     @Secured(Role.ADMIN)
@@ -87,6 +90,7 @@ public class ContractController {
             .stream()
             .map(ContractDto::getSalary)
             .reduce(BigDecimal.ZERO, BigDecimal::add));
+        model.addAttribute("getUsersWithRaise", userSalaryHistoryService.getAllUsersWithPayRaise());
 
 
         return "pay-raise";
@@ -97,9 +101,21 @@ public class ContractController {
     @PatchMapping("/{contractId}/pay-raise")
     public String payRaiseToUser(@PathVariable("contractId") Long contractId,
                                  @RequestParam(value = "bonusAmount", required = false) BigDecimal bonusAmount) {
+
         System.out.printf("Bonus Amount %s", bonusAmount);
-        contractService.payRaise(contractId, bonusAmount);
+
+        contractService.payRaiseAndKeepHistory(contractId, bonusAmount);
+
         return "redirect:/contracts/pay-raise";
+    }
+
+    @Secured(Role.ADMIN)
+    @DeleteMapping("/delete-history")
+    public String deleteAllHistory() {
+
+        userSalaryHistoryService.deleteAllPayRaiseHistory();
+
+        return "redirect:/contacts/pay-raise";
     }
 
 

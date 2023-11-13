@@ -4,7 +4,7 @@ import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ChangePositionDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
-import com.example.maritimeapp.service.UserHistoryService;
+import com.example.maritimeapp.service.UserPositionHistoryService;
 import com.example.maritimeapp.service.UserService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -27,11 +27,11 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-    private final UserHistoryService userHistoryService;
+    private final UserPositionHistoryService userPositionHistoryService;
 
-    public UserController(UserService userService, UserHistoryService userHistoryService) {
+    public UserController(UserService userService, UserPositionHistoryService userPositionHistoryService) {
         this.userService = userService;
-        this.userHistoryService = userHistoryService;
+        this.userPositionHistoryService = userPositionHistoryService;
     }
 
     @GetMapping("/register")
@@ -64,7 +64,7 @@ public class UserController {
 
         model.addAttribute("totalEmployeesInCompany", userService.getAllEmployees());
         model.addAttribute("positions", PositionEnum.values());
-        model.addAttribute("getUpdatedUsers",userHistoryService.getAllUsersWithChangedPosition());
+        model.addAttribute("getUpdatedUsers", userPositionHistoryService.getAllUsersWithChangedPosition());
 
         return "promote-position";
     }
@@ -84,7 +84,7 @@ public class UserController {
     @DeleteMapping("/delete")
     public String deleteAllHistory() {
 
-        userHistoryService.deleteAllHistory();
+        userPositionHistoryService.deleteAllPositionChangeHistory();
 
         return "redirect:/users/promote";
     }

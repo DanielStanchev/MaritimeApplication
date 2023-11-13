@@ -8,14 +8,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "users_history")
-public class UserHistory extends BaseEntity{
-
-    @Column(name = "previous_position")
-    private String previousPosition;
-
-    @Column(name = "new_position")
-    private String newPosition;
+@Table(name = "users_salary_history")
+public class UserSalaryHistory extends BaseEntity{
 
     @Column(name = "previous_salary")
     private BigDecimal previousSalary;
@@ -29,23 +23,7 @@ public class UserHistory extends BaseEntity{
     @ManyToOne
     private UserEntity employees;
 
-    public UserHistory() {
-    }
-
-    public String getPreviousPosition() {
-        return previousPosition;
-    }
-
-    public void setPreviousPosition(String previousPosition) {
-        this.previousPosition = previousPosition;
-    }
-
-    public String getNewPosition() {
-        return newPosition;
-    }
-
-    public void setNewPosition(String newPosition) {
-        this.newPosition = newPosition;
+    public UserSalaryHistory() {
     }
 
     public BigDecimal getPreviousSalary() {

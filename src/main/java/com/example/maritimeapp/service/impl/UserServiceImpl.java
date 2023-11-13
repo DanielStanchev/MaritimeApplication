@@ -1,12 +1,11 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ChangePositionDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.UserEntity;
-import com.example.maritimeapp.model.entity.UserHistory;
+import com.example.maritimeapp.model.entity.UserPositionHistory;
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
 import com.example.maritimeapp.model.entity.enums.RoleEnum;
-import com.example.maritimeapp.repository.UserHistoryRepository;
+import com.example.maritimeapp.repository.UserPositionHistoryRepository;
 import com.example.maritimeapp.repository.UserRepository;
 import com.example.maritimeapp.service.RoleService;
 import com.example.maritimeapp.service.UserService;
@@ -30,15 +29,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
-    private final UserHistoryRepository userHistoryRepository;
+    private final UserPositionHistoryRepository userPositionHistoryRepository;
 
     public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository, PasswordEncoder passwordEncoder, RoleService roleService,
-                           UserHistoryRepository userHistoryRepository) {
+                           UserPositionHistoryRepository userPositionHistoryRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
-        this.userHistoryRepository = userHistoryRepository;
+        this.userPositionHistoryRepository = userPositionHistoryRepository;
     }
 
     @Override
@@ -116,7 +115,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity user = userRepository.findById(userId).orElse(null);
 
-        UserHistory changeOfPositionHistory = new UserHistory();
+        UserPositionHistory changeOfPositionHistory = new UserPositionHistory();
         changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
 
 
@@ -128,7 +127,7 @@ public class UserServiceImpl implements UserService {
         changeOfPositionHistory.setDateOfChange(LocalDate.now());
         changeOfPositionHistory.setEmployees(user);
 
-        userHistoryRepository.save(changeOfPositionHistory);
+        userPositionHistoryRepository.save(changeOfPositionHistory);
 
     }
 

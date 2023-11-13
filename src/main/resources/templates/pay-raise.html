@@ -48,21 +48,25 @@
                     raise</h3>
 
                 <h6 class="mySticky bg-blur text-light mb-0 mt-0"
-                    th:text="|Total sum given: ${totalSum} lv.|"></h6>
+                    th:text="|Total promotions in company: ${getUsersWithRaise.size()}|"></h6>
 
                 <div class="bg-dark rounded m-auto" style="height: 40vh; overflow: auto">
                     <table class="table table-striped table-dark">
-                        <tr th:each="e : ${employeesRaised}">
-                            <td th:text="|*{e.employee.firstName} *{e.employee.getLastName()} / new salary: *{e.salary} lv.|"></td>
+                        <tr th:each="e : ${getUsersWithRaise}">
+                            <td th:text="|User name : *{e.getUserName().firstName} *{e.getUserName().lastName}|"></td>
+                            <td th:text="|Previous salary: *{e.getPreviousSalary()}|"></td>
+                            <td th:text="|New salary : *{e.getNewSalary()}|"></td>
+                            <td th:text="|Date of change : *{e.getDateOfChange()}|"></td>
                         </tr>
                     </table>
                 </div>
 
-                <a href="/" class="mt-1 mb-0 btn btn-danger"
-                   th:href="@{/home/remove-all-song-from-playlist}">Remove history</a>
+                <form th:action="@{/contracts/delete-history}"
+                      th:method="DELETE">
+                    <button type="submit" class="btn btn-info w-50 bg-danger">Remove all history</button>
+                </form>
             </div>
         </div>
-
         <hr class="bg-light">
     </div>
 </main>
