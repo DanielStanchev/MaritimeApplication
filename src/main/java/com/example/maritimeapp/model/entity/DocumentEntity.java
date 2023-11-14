@@ -2,6 +2,7 @@ package com.example.maritimeapp.model.entity;
 
 
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
+import com.example.maritimeapp.model.entity.enums.StatusEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +32,9 @@ public class DocumentEntity extends BaseEntity {
 
     @ManyToOne
     private UserEntity possessor;
+
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status;
 
     public DocumentEntity() {
     }
@@ -73,5 +77,13 @@ public class DocumentEntity extends BaseEntity {
 
     public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }

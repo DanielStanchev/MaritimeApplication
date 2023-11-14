@@ -5,6 +5,7 @@ import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
+import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import com.example.maritimeapp.repository.DocumentRepository;
 import com.example.maritimeapp.service.DocumentService;
 import com.example.maritimeapp.service.UserService;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -51,6 +53,7 @@ public class DocumentServiceImpl implements DocumentService {
         UserEntity possessor = userService.findUserByUsername(loggedInUser.getUsername())
             .orElse(null);
         documentToSave.setPossessor(possessor);
+        documentToSave.setStatus(StatusEnum.VALID);
 
         documentRepository.save(documentToSave);
 
@@ -128,5 +131,20 @@ public class DocumentServiceImpl implements DocumentService {
 
             })
             .toList();
+    }
+
+    @Override
+    public void setNewStatusIfExpiredDocument() {
+        documentRepository.findAll().stream()
+            .skip(2)
+            .forEach(this::updateStatusIfExpired);
+    }
+
+    private void updateStatusIfExpired(DocumentEntity document) {
+        LocalDate expiry = document.getExpiryDate();
+        if (expiry.isBefore(LocalDate.now())) {
+            document.setStatus(StatusEnum.EXPIRED);
+            documentRepository.save(document);
+        }
     }
 }

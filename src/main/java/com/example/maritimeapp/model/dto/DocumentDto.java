@@ -2,6 +2,7 @@ package com.example.maritimeapp.model.dto;
 
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
+import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -29,6 +30,8 @@ public class DocumentDto {
     private LocalDate expiryDate;
 
     private UserDto possessor;
+    
+    private StatusEnum status;
 
     public DocumentDto() {
     }
@@ -79,5 +82,13 @@ public class DocumentDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }

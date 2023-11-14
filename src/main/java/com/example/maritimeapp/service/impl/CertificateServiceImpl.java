@@ -2,7 +2,9 @@ package com.example.maritimeapp.service.impl;
 
 import com.example.maritimeapp.model.dto.CertificateDto;
 import com.example.maritimeapp.model.entity.CertificateEntity;
+import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.ShipEntity;
+import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import com.example.maritimeapp.repository.CertificateRepository;
 import com.example.maritimeapp.service.CertificateService;
 import com.example.maritimeapp.service.ShipService;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Service
@@ -43,10 +46,25 @@ public class CertificateServiceImpl implements CertificateService {
         certificates.add(certificateToSave);
 
         certificateToSave.setShip(currentShip);
+        certificateToSave.setStatus(StatusEnum.VALID);
 
         certificateRepository.save(certificateToSave);
 
         return "redirect:/";
+    }
+
+    @Override
+    public void setNewStatusIfExpiredCertificate() {
+        certificateRepository.findAll()
+            .forEach(this::updateStatusIfExpired);
+    }
+
+    private void updateStatusIfExpired(CertificateEntity certificate) {
+        LocalDate expiry = certificate.getExpiryDate();
+        if (expiry.isBefore(LocalDate.now())) {
+            certificate.setStatus(StatusEnum.EXPIRED);
+            certificateRepository.save(certificate);
+        }
     }
 }
 

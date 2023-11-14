@@ -16,4 +16,6 @@ public interface DocumentService {
     void removeDocument(Long documentId);
 
     List<DocumentDto> getAllDocuments();
+
+    void setNewStatusIfExpiredDocument();
 }

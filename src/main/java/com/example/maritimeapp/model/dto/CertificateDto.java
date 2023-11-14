@@ -1,5 +1,6 @@
 package com.example.maritimeapp.model.dto;
 
+import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -27,6 +28,8 @@ public class CertificateDto {
 
     @NotNull
     private ShipDto ship;
+
+    private StatusEnum status;
 
     public CertificateDto() {
     }
@@ -69,5 +72,13 @@ public class CertificateDto {
 
     public void setShip(ShipDto ship) {
         this.ship = ship;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 }
