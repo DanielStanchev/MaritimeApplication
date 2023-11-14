@@ -91,7 +91,7 @@ public class DocumentServiceImpl implements DocumentService {
             .toList();
     }
 
-    private User getLoggedInUserFromSecurityContext() {
+    public User getLoggedInUserFromSecurityContext() {
         return (User) SecurityContextHolder.getContext()
             .getAuthentication()
             .getPrincipal();

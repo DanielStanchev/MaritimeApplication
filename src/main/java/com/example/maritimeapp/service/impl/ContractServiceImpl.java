@@ -8,6 +8,7 @@ import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.UserSalaryHistory;
 import com.example.maritimeapp.repository.ContractRepository;
+import com.example.maritimeapp.repository.UserRepository;
 import com.example.maritimeapp.repository.UsersSalaryHistoryRepository;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
@@ -33,15 +34,17 @@ public class ContractServiceImpl implements ContractService {
     private final UserService userService;
     private final ShipService shipService;
     private final UsersSalaryHistoryRepository usersSalaryHistoryRepository;
+    private final UserRepository userRepository;
 
     public ContractServiceImpl(ModelMapper modelMapper, ContractRepository contractRepository, UserService userService, ShipService shipService,
-                               UsersSalaryHistoryRepository usersSalaryHistoryRepository) {
+                               UsersSalaryHistoryRepository usersSalaryHistoryRepository, UserRepository userRepository) {
         this.modelMapper = modelMapper;
         this.contractRepository = contractRepository;
         this.userService = userService;
         this.shipService = shipService;
 
         this.usersSalaryHistoryRepository = usersSalaryHistoryRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -62,17 +65,24 @@ public class ContractServiceImpl implements ContractService {
         ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
                                                                     .getName());
 
+
+
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
 
         Set<ContractEntity> contractsByShip = currentShip.getContracts();
         contractsByShip.add(contractToSave);
 
+        Set<UserEntity> crew  = currentShip.getCrewMember();
+        crew.add(employee);
+
+        employee.setUserShip(currentShip);
 
         contractToSave.setPossessor(employee);
         contractToSave.setShip(currentShip);
 
         contractRepository.save(contractToSave);
+        userRepository.save(employee);
 
         return "redirect:/contracts/show";
     }
@@ -106,7 +116,13 @@ public class ContractServiceImpl implements ContractService {
         ContractEntity contract = contractRepository.findById(contractId)
             .orElse(null);
 
+        UserEntity user = userRepository.findUserEntityByContractsContains(contract);
+
+        user.setUserShip(null);
+
+        userRepository.save(user);
         contractRepository.delete(contract);
+
     }
 
     @Override
