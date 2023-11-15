@@ -19,7 +19,7 @@ public class ShipCertificatesAndUserDocumentsExpiryScheduler {
     }
 
     @Scheduled(cron = "* * */12 * * *")
-    public void cleanHistory(){
+    public void setNewStatusesIfExpired(){
         System.out.println("Triggered scheduler at "+ LocalDateTime.now());
 
         documentService.setNewStatusIfExpiredDocument();

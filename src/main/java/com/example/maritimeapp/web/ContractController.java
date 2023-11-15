@@ -115,7 +115,7 @@ public class ContractController {
 
         userSalaryHistoryService.deleteAllPayRaiseHistory();
 
-        return "redirect:/contacts/pay-raise";
+        return "redirect:/contracts/pay-raise";
     }
 
 

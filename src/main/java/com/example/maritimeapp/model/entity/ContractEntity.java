@@ -26,6 +26,9 @@ public class ContractEntity extends BaseEntity{
     @ManyToOne
     private ShipEntity ship;
 
+    @Column(name = "number_of_pay_raises")
+    private int numberOfPayRaises;
+
     public ContractEntity() {
     }
 
@@ -69,5 +72,11 @@ public class ContractEntity extends BaseEntity{
         this.ship = ship;
     }
 
+    public int getNumberOfPayRaises() {
+        return numberOfPayRaises;
+    }
 
+    public void setNumberOfPayRaises(int numberOfPayRaises) {
+        this.numberOfPayRaises = numberOfPayRaises;
+    }
 }

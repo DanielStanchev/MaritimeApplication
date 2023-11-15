@@ -151,7 +151,6 @@ public class ContractServiceImpl implements ContractService {
         final ContractEntity contract = contractRepository.findById(contractId)
             .orElse(null);
 
-        //UserEntity user = contractRepository.findUserByContactId
 
         UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
         changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
@@ -163,6 +162,8 @@ public class ContractServiceImpl implements ContractService {
         System.out.printf("INFO: Contract with ID %s salary update from %s to %s", contract.getId(), contract.getSalary(), contract.getSalary().add(bonusAmount));
 
         contract.setSalary(contract.getSalary().add(bonusAmount));
+        contract.setNumberOfPayRaises(contract.getNumberOfPayRaises()+1);
+
         contractRepository.save(contract);
 
         changeOfSalaryHistory.setNewSalary(contract.getSalary());
