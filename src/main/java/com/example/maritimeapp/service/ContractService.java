@@ -14,7 +14,7 @@ public interface ContractService {
 
     void removeContract(Long contractId);
 
-    List<ContractDto> getContractsByUser();
+    List<ContractDto> getContractsByUser(String username);
 
     void payRaiseAndKeepHistory(Long contractId, BigDecimal bonusAmount);
 }

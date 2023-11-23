@@ -37,7 +37,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("documentAddDto", documentDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.documentAddDto", bindingResult);
@@ -49,14 +49,11 @@ public class DocumentServiceImpl implements DocumentService {
 
         documentToSave.setType(documentDto.getDocumentType());
 
-        User loggedInUser = getLoggedInUserFromSecurityContext();
-        UserEntity possessor = userService.findUserByUsername(loggedInUser.getUsername())
+        UserEntity possessor = userService.findUserByUsername(username)
             .orElse(null);
         documentToSave.setPossessor(possessor);
         documentToSave.setStatus(StatusEnum.VALID);
-
         documentRepository.save(documentToSave);
-
         return "redirect:/documents/show";
     }
 
@@ -77,11 +74,9 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<DocumentDto> getDocumentsByUser() {
+    public List<DocumentDto> getDocumentsByUsername(String username) {
 
-        User loggedInUser = getLoggedInUserFromSecurityContext();
-
-        UserEntity possessor = userService.findUserByUsername(loggedInUser.getUsername())
+        UserEntity possessor = userService.findUserByUsername(username)
             .orElse(null);
 
         return documentRepository.findAllByPossessor(possessor)
@@ -94,11 +89,6 @@ public class DocumentServiceImpl implements DocumentService {
             .toList();
     }
 
-    public User getLoggedInUserFromSecurityContext() {
-        return (User) SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getPrincipal();
-    }
 
     @Override
     public void removeDocument(Long documentId) {
@@ -134,7 +124,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void setNewStatusIfExpiredDocument() {
+    public void expireDocuments() {
         documentRepository.findAll().stream()
             .skip(2)
             .forEach(this::updateStatusIfExpired);

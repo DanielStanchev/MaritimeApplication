@@ -6,6 +6,8 @@ import com.example.maritimeapp.model.entity.UserSalaryHistory;
 import com.example.maritimeapp.repository.ContractRepository;
 import com.example.maritimeapp.repository.UserRepository;
 import com.example.maritimeapp.repository.UsersSalaryHistoryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -18,13 +20,14 @@ import java.util.Map;
 
 
 @Component
-public class seniorityBonusInterceptor implements HandlerInterceptor {
+public class SeniorityBonusInterceptor implements HandlerInterceptor {
+    private static final Logger logger = LoggerFactory.getLogger(SeniorityBonusInterceptor.class);
 
     private final ContractRepository contractRepository;
     private final UserRepository userRepository;
     private final UsersSalaryHistoryRepository usersSalaryHistoryRepository;
 
-    public seniorityBonusInterceptor(ContractRepository contractRepository, UserRepository userRepository,
+    public SeniorityBonusInterceptor(ContractRepository contractRepository, UserRepository userRepository,
                                      UsersSalaryHistoryRepository usersSalaryHistoryRepository) {
         this.contractRepository = contractRepository;
         this.userRepository = userRepository;
@@ -34,11 +37,12 @@ public class seniorityBonusInterceptor implements HandlerInterceptor {
 
 
     @Override
+    @SuppressWarnings("unchecked")
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         final Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
         if (pathVariables == null || pathVariables.get("contractId") == null) {
-            System.out.println("ContractId is null");
+            logger.info("ContractId is null");
             return;
         }
 
@@ -63,7 +67,7 @@ public class seniorityBonusInterceptor implements HandlerInterceptor {
             contractRepository.save(contractNeeded);
             usersSalaryHistoryRepository.save(salaryToUpdate);
 
-            System.out.println("Bonus for 2nd pay raise given!");
+            logger.info("Bonus for 2nd pay raise given!");
         }
     }
 }

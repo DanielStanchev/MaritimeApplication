@@ -2,11 +2,14 @@ package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ContractDto;
+import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserSalaryHistoryService;
 import com.example.maritimeapp.service.UserService;
+import com.example.maritimeapp.util.SecurityUtl;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +25,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/contracts")
@@ -76,7 +80,11 @@ public class ContractController {
     @GetMapping("/show-my")
     public String showContractsByUser(Model model) {
 
-        model.addAttribute("contractsByUser", contractService.getContractsByUser());
+        User loggedInUser = SecurityUtl.getLoggedInUser();
+
+        List<ContractDto> userContacts = contractService.getContractsByUser(loggedInUser.getUsername());
+
+        model.addAttribute("contractsByUser", userContacts);
 
         return "all-contracts-by-user";
     }

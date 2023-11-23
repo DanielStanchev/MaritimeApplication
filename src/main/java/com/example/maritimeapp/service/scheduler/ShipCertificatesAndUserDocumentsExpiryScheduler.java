@@ -22,7 +22,7 @@ public class ShipCertificatesAndUserDocumentsExpiryScheduler {
     public void setNewStatusesIfExpired(){
         System.out.println("Triggered scheduler at "+ LocalDateTime.now());
 
-        documentService.setNewStatusIfExpiredDocument();
+        documentService.expireDocuments();
         certificateService.setNewStatusIfExpiredCertificate();
 
     }

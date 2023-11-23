@@ -7,15 +7,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 public interface DocumentService {
-    String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+    String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username);
 
     void initDocs();
 
-    List<DocumentDto> getDocumentsByUser();
+    List<DocumentDto> getDocumentsByUsername(String username);
 
+    /**
+     * Remove document by ID
+     * @param documentId ID of the document to be removed
+     */
     void removeDocument(Long documentId);
 
     List<DocumentDto> getAllDocuments();
 
-    void setNewStatusIfExpiredDocument();
+    /**
+     * Expires document which expiration date has passed.
+     */
+    void expireDocuments();
 }

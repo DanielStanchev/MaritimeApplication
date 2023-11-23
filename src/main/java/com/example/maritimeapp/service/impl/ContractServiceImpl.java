@@ -14,8 +14,6 @@ import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -64,8 +62,6 @@ public class ContractServiceImpl implements ContractService {
 
         ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
                                                                     .getName());
-
-
 
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
@@ -126,20 +122,15 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public List<ContractDto> getContractsByUser() {
+    public List<ContractDto> getContractsByUser(String username) {
 
-        User loggedInUser = getLoggedInUserFromSecurityContext();
-
-        UserEntity employee = userService.findUserByUsername(loggedInUser.getUsername())
+        UserEntity employee = userService.findUserByUsername(username)
             .orElse(null);
-
         return contractRepository.findAllByPossessor(employee)
             .stream()
             .map(c -> {
                 ContractDto contractToShow = modelMapper.map(c, ContractDto.class);
-
                 contractToShow.setShip(modelMapper.map(c.getShip(), ShipDto.class));
-
                 return contractToShow;
             })
             .toList();
@@ -151,33 +142,19 @@ public class ContractServiceImpl implements ContractService {
         final ContractEntity contract = contractRepository.findById(contractId)
             .orElse(null);
 
-
         UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
         changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
-
         if (contract == null) {
             System.out.println("ERROR: Contract is NULL");
             return;
         }
         System.out.printf("INFO: Contract with ID %s salary update from %s to %s", contract.getId(), contract.getSalary(), contract.getSalary().add(bonusAmount));
-
         contract.setSalary(contract.getSalary().add(bonusAmount));
         contract.setNumberOfPayRaises(contract.getNumberOfPayRaises()+1);
-
         contractRepository.save(contract);
-
         changeOfSalaryHistory.setNewSalary(contract.getSalary());
         changeOfSalaryHistory.setDateOfChange(LocalDate.now());
         changeOfSalaryHistory.setEmployees(contract.getPossessor());
-
         usersSalaryHistoryRepository.save(changeOfSalaryHistory);
     }
-
-
-    private User getLoggedInUserFromSecurityContext() {
-        return (User) SecurityContextHolder.getContext()
-            .getAuthentication()
-            .getPrincipal();
-    }
-
 }

@@ -116,6 +116,7 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findById(userId).orElse(null);
 
         UserPositionHistory changeOfPositionHistory = new UserPositionHistory();
+
         changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
 
 
