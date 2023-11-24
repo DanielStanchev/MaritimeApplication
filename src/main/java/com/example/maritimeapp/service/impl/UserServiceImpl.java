@@ -79,7 +79,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserEntity> findUserByUsername(String username) {
-
         return userRepository.findUserByUsername(username);
     }
 
@@ -116,28 +115,19 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepository.findById(userId).orElse(null);
 
         UserPositionHistory changeOfPositionHistory = new UserPositionHistory();
-
         changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
-
-
         user.setPosition(position);
         userRepository.save(user);
-
-
         changeOfPositionHistory.setNewPosition(user.getPosition().getDescription());
         changeOfPositionHistory.setDateOfChange(LocalDate.now());
         changeOfPositionHistory.setEmployees(user);
-
         userPositionHistoryRepository.save(changeOfPositionHistory);
-
     }
-
 
     private void initAdminWithStartOfApp() {
         if (userRepository.count() != 0) {
             return;
         }
-
         UserEntity userAdmin = new UserEntity();
         userAdmin.setUsername("Daniel");
         userAdmin.setFirstName("Daniel");
@@ -150,7 +140,6 @@ public class UserServiceImpl implements UserService {
                                    .equals(RoleEnum.ADMIN))
                                .toList());
         userAdmin.setRegistryDate(LocalDateTime.now());
-
         userRepository.save(userAdmin);
     }
 
