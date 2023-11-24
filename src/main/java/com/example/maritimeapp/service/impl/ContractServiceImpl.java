@@ -59,27 +59,19 @@ public class ContractServiceImpl implements ContractService {
         UserEntity employee = userService.findUserByUsername(contractDto.getEmployee()
                                                                  .getUsername())
             .orElse(null);
-
         ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
                                                                     .getName());
-
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
-
         Set<ContractEntity> contractsByShip = currentShip.getContracts();
         contractsByShip.add(contractToSave);
-
         Set<UserEntity> crew  = currentShip.getCrewMember();
         crew.add(employee);
-
         employee.setUserShip(currentShip);
-
         contractToSave.setPossessor(employee);
         contractToSave.setShip(currentShip);
-
         contractRepository.save(contractToSave);
         userRepository.save(employee);
-
         return "redirect:/contracts/show";
     }
 

@@ -228,7 +228,6 @@ class ContractServiceImplTest {
         contractDto.setStartDate(LocalDate.of(2023, 12, 7));
 
         when(modelMapper.map(any(), eq(ContractDto.class))).thenReturn(contractDto);
-        List<ContractDto> contracts = contractServiceImpl.getAllContracts();
 
         assertEquals(2, contractServiceImpl.getAllContracts()
             .size());

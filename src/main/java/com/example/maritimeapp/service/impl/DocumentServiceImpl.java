@@ -89,19 +89,16 @@ public class DocumentServiceImpl implements DocumentService {
             .toList();
     }
 
-
     @Override
     public void removeDocument(Long documentId) {
 
         DocumentEntity document = documentRepository.findById(documentId)
             .orElse(null);
-
         documentRepository.delete(document);
     }
 
     @Override
     public List<DocumentDto> getAllDocuments() {
-
         return documentRepository.findAll()
             .stream()
             .skip(2)
@@ -110,15 +107,10 @@ public class DocumentServiceImpl implements DocumentService {
                                                                           .getUsername())
                     .orElse(null);
 
-
                 DocumentDto documentToShow = modelMapper.map(d, DocumentDto.class);
-
                 documentToShow.setDocumentType(d.getType());
-
                 documentToShow.setPossessor(modelMapper.map(possessor, UserDto.class));
-
                 return documentToShow;
-
             })
             .toList();
     }
