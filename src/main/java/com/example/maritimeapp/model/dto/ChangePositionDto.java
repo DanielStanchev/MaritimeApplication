@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 public class ChangePositionDto {
 
+    private Long id;
+
     private String previousPosition;
 
     private String newPosition;
@@ -16,6 +18,14 @@ public class ChangePositionDto {
     private UserDto userName;
 
     public ChangePositionDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPreviousPosition() {

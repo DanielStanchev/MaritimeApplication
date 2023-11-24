@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 public class PayRaiseDto {
 
+    private Long id;
+
     private String previousSalary;
 
     private String newSalary;
@@ -16,6 +18,14 @@ public class PayRaiseDto {
     private UserDto userName;
 
     public PayRaiseDto() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPreviousSalary() {
