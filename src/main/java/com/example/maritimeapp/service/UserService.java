@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service;
 
+import com.example.maritimeapp.model.dto.PaidLeaveDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
@@ -21,4 +22,5 @@ public interface UserService {
     List<UserDto> getAllEmployees();
 
     void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position);
+
 }

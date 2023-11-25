@@ -11,4 +11,5 @@ public interface UserPositionHistoryService {
 
     void deleteAllPositionChangeHistory();
 
+
 }

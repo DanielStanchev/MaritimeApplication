@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:replace="~{fragments/commons::head}">
+</head>
+<body class="bg-secondary">
+
+<header th:replace="~{fragments/commons::nav}">
+</header>
+
+<main role="main" class="bg-secondary">
+    <div class="jumbotron">
+        <div class="container text-light ">
+            <h1 class="display-3 ">
+                <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">
+                    Schedule a paid leave</strong></h1>
+        </div>
+        <div class="container bg-blur rounded p-5 mt-5 w-75">
+            <form  th:action="@{/users/schedule-a-paid-leave}"  th:method="post" th:object="${paidLeaveDto}"
+                  class=" text-center text-light">
+
+                <div class="form-group row">
+                    <label for="dateFrom" class="col-sm-2 col-form-label">From:</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{dateFrom}" th:errorclass="is-invalid" type="date" class="form-control" id="dateFrom"
+                               aria-describedby="dateFromHelpInline" placeholder="Issue date">
+                        <small id="dateFromHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                            Please enter start date which is not in the past.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label for="dateTo" class="col-sm-2 col-form-label">To:</label>
+                    <div class="col-sm-10">
+                        <input th:field="*{dateTo}" th:errorclass="is-invalid" type="date" class="form-control" id="dateTo"
+                               aria-describedby="dateToHelpInline" placeholder="Expiry date">
+                        <small id="dateToHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                            Please enter end date which is not in the past.
+                        </small>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="btn btn-info w-50">Submit for approval</button>
+            </form>
+            <hr class="bg-light">
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/commons::footer}">
+
+</footer>
+</body>
+</html>

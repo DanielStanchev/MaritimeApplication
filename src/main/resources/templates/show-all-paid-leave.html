@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/commons::head"></head>
+<body class="bg-secondary">
+<header th:replace="fragments/commons::nav"></header>
+<main>
+    <div class="jumbotron justify-content-center">
+        <div class="container text-light">
+            <h1 class="display-3">
+                <strong class="bg-blur rounded border-left border-white pl-3 border-bottom">
+                    All paid leave assessments
+                </strong>
+            </h1>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mt-1 mb-1">
+                <h3 class="mySticky bg-blur text-light mb-0 mt-2">Assessments</h3>
+                <h6 class="mySticky bg-blur text-danger mb-0 mt-0"
+                    th:text="|Total assessments pending: ${assessments.size()}|"></h6>
+                <div class="bg-dark rounded" style="height: 40vh; overflow: auto">
+                    <div th:each="a: ${assessments}"
+                         class="mt-1 rounded badge-info">
+                        <span th:text="|Employee name : *{a.employee.firstName} *{a.employee.lastName}|"></span>
+                        <br>
+                        <span th:text="|Date from : *{a.dateFrom}|"></span>
+                        <br>
+                        <span th:text="|Date to : *{a.dateTo}|"></span>
+                        <form th:action="@{/users/{userId}/show-all-paid-leave(userId = ${a.id})}"
+                              th:method="PATCH">
+                            <br>
+
+                            <div class="form-group row">
+                                <label for="ship" class="col-sm-1 col-form-label">Current status:</label>
+                                <div class="col-sm-5">
+                                    <select th:name="status" id="ship" name="ship"
+                                            class="custom-select"
+                                            aria-describedby="shipTypeHelpInline">
+                                        <option value="" selected th:text="*{a.getStatus().description}">Pending</option>
+                                        <option th:each="s : ${allStatuses}" th:value="${s.name()}"
+                                                th:text="${s.description}"></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="ml-3 btn btn-info bg-danger">Change status
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+
+        <hr class="bg-light">
+    </div>
+</main>
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>
