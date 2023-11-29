@@ -18,6 +18,10 @@
             <form  th:action="@{/contracts/add}"  th:method="post" th:object="${contractDto}"
                   class=" text-center text-light">
 
+                <div th:if="${message}">
+                    <p th:text="${message}" class="bg-blur alert bg-danger" ></p>
+                </div>
+
                 <div class="form-group row">
                     <label for="employee" class="col-sm-2 col-form-label">Employee</label>
                     <div class="col-sm-10">
