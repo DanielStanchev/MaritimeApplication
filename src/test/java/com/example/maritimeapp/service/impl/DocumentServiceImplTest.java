@@ -127,10 +127,13 @@ class DocumentServiceImplTest {
     void testRemoveDocument() {
         Long documentIdToRemove = 1L;
         DocumentEntity documentEntity = new DocumentEntity();
+        UserEntity user = new UserEntity();
+        user.setUsername("Ivan");
+        documentEntity.setPossessor(user);
 
         when(documentRepository.findById(documentIdToRemove)).thenReturn(Optional.of(documentEntity));
 
-        documentServiceToTest.removeDocument(documentIdToRemove);
+        documentServiceToTest.removeDocument(documentIdToRemove,documentEntity.getPossessor().getUsername());
 
         verify(documentRepository, times(1)).delete(documentEntity);
     }

@@ -53,8 +53,8 @@ public class DocumentController {
 
     @DeleteMapping("/{documentId}/remove")
     public String removeDocument(@PathVariable("documentId") Long documentId) {
-
-        documentService.removeDocument(documentId);
+        User loggedInUser = SecurityUtl.getLoggedInUser();
+        documentService.removeDocument(documentId,loggedInUser.getUsername());
         return "redirect:/documents/show";
     }
 

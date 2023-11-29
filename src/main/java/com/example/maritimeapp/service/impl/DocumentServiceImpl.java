@@ -87,11 +87,20 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void removeDocument(Long documentId) {
+    public void removeDocument(Long documentId,String username) {
 
         DocumentEntity document = documentRepository.findById(documentId)
             .orElse(null);
-        documentRepository.delete(document);
+
+        if (document != null) {
+            if (document.getPossessor().getUsername().equals(username)) {
+                documentRepository.delete(document);
+            } else {
+                throw new SecurityException("User does not have permission to delete this document");
+            }
+        } else {
+            throw new NullPointerException("Document not found");
+        }
     }
 
     @Override

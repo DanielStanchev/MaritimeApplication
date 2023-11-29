@@ -17,7 +17,7 @@ public interface DocumentService {
      * Remove document by ID
      * @param documentId ID of the document to be removed
      */
-    void removeDocument(Long documentId);
+    void removeDocument(Long documentId,String username);
 
     List<DocumentDto> getAllDocuments();
 
