@@ -63,17 +63,29 @@ public class ContractServiceImpl implements ContractService {
         UserEntity employee = userService.findUserByUsername(contractDto.getEmployee()
                                                                  .getUsername())
             .orElse(null);
+
+        ContractEntity existingContractForWantedDates =
+            contractRepository.findIfThereIsAlreadyExistingContractForGivenDates(employee.getUsername(), contractToSave.getStartDate(),
+                                                                                 contractToSave.getDisembarkDate()).orElse(null);
+
+        if (existingContractForWantedDates != null) {
+            redirectAttributes.addFlashAttribute("message", "Employee is still under ongoing contract!");
+            return "redirect:add";
+        }
+
         ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
                                                                     .getName());
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
         Set<ContractEntity> contractsByShip = currentShip.getContracts();
         contractsByShip.add(contractToSave);
-        Set<UserEntity> crew  = currentShip.getCrewMember();
+        Set<UserEntity> crew = currentShip.getCrewMember();
         crew.add(employee);
         employee.setUserShip(currentShip);
         contractToSave.setPossessor(employee);
         contractToSave.setShip(currentShip);
+
+
         contractRepository.save(contractToSave);
         userRepository.save(employee);
         return "redirect:/contracts/show";
@@ -145,8 +157,9 @@ public class ContractServiceImpl implements ContractService {
             return;
         }
 
-        contract.setSalary(contract.getSalary().add(bonusAmount));
-        contract.setNumberOfPayRaises(contract.getNumberOfPayRaises()+1);
+        contract.setSalary(contract.getSalary()
+                               .add(bonusAmount));
+        contract.setNumberOfPayRaises(contract.getNumberOfPayRaises() + 1);
         contractRepository.save(contract);
         changeOfSalaryHistory.setNewSalary(contract.getSalary());
         changeOfSalaryHistory.setDateOfChange(LocalDate.now());

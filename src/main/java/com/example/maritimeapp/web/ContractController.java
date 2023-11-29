@@ -84,9 +84,7 @@ public class ContractController {
     public String showContractsByUser(Model model) {
 
         User loggedInUser = SecurityUtl.getLoggedInUser();
-
         List<ContractDto> userContacts = contractService.getContractsByUser(loggedInUser.getUsername());
-
         model.addAttribute("contractsByUser", userContacts);
 
         return "all-contracts-by-user";
