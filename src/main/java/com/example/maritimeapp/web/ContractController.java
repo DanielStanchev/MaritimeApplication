@@ -2,12 +2,13 @@ package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ContractDto;
-import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserSalaryHistoryService;
 import com.example.maritimeapp.service.UserService;
 import com.example.maritimeapp.util.SecurityUtl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/contracts")
 public class ContractController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ContractController.class);
 
     private final ContractService contractService;
     private final UserService userService;
@@ -110,10 +113,8 @@ public class ContractController {
     public String payRaiseToUser(@PathVariable("contractId") Long contractId,
                                  @RequestParam(value = "bonusAmount", required = false) BigDecimal bonusAmount) {
 
-        System.out.printf("Bonus Amount %s", bonusAmount);
-
+        logger.info(String.format("Bonus Amount %s", bonusAmount));
         contractService.payRaiseAndKeepHistory(contractId, bonusAmount);
-
         return "redirect:/contracts/pay-raise";
     }
 
@@ -122,10 +123,8 @@ public class ContractController {
     public String deleteAllHistory() {
 
         userSalaryHistoryService.deleteAllPayRaiseHistory();
-
         return "redirect:/contracts/pay-raise";
     }
-
 
     @ModelAttribute
     public ContractDto contractDto() {

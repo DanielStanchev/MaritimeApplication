@@ -1,14 +1,9 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.PaidLeaveDto;
-import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.dto.UserDto;
-import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.model.entity.PaidLeaveEntity;
-import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
-import com.example.maritimeapp.model.entity.UserSalaryHistory;
 import com.example.maritimeapp.model.entity.enums.PaidLeaveStatusEnum;
 import com.example.maritimeapp.repository.PaidLeaveRepository;
 import com.example.maritimeapp.service.PaidLeaveService;
@@ -18,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -67,6 +61,9 @@ public class PaidLeaveServiceImpl implements PaidLeaveService {
     public List<PaidLeaveDto> getAllPaidLeaveAssessments() {
         return paidLeaveRepository.findAll()
             .stream()
+            .filter(p -> p.getStatus()
+                .getDescription()
+                .equals("Pending"))
             .map(p -> {
                 PaidLeaveDto paidLeaveToShow = modelMapper.map(p, PaidLeaveDto.class);
 

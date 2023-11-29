@@ -2,7 +2,6 @@ package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
 import com.example.maritimeapp.model.dto.ShipDto;
-import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.service.ShipService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;

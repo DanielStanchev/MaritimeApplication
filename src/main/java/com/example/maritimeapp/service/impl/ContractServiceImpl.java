@@ -14,6 +14,8 @@ import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,6 +28,8 @@ import java.util.Set;
 
 @Service
 public class ContractServiceImpl implements ContractService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ContractServiceImpl.class);
 
     private final ModelMapper modelMapper;
     private final ContractRepository contractRepository;
@@ -137,10 +141,10 @@ public class ContractServiceImpl implements ContractService {
         UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
         changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
         if (contract == null) {
-            System.out.println("ERROR: Contract is NULL");
+            logger.error("ERROR: Contract is NULL");
             return;
         }
-        System.out.printf("INFO: Contract with ID %s salary update from %s to %s", contract.getId(), contract.getSalary(), contract.getSalary().add(bonusAmount));
+
         contract.setSalary(contract.getSalary().add(bonusAmount));
         contract.setNumberOfPayRaises(contract.getNumberOfPayRaises()+1);
         contractRepository.save(contract);

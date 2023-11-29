@@ -2,7 +2,6 @@ package com.example.maritimeapp.service.impl;
 
 import com.example.maritimeapp.model.dto.CertificateDto;
 import com.example.maritimeapp.model.entity.CertificateEntity;
-import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import com.example.maritimeapp.repository.CertificateRepository;

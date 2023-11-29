@@ -53,7 +53,7 @@ public class SecurityConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
-        // This service translates the mobilele users and roles
+        // This service translates the users and roles
         // to representation which spring security understands.
         return new MaritimeAppUserDetailService(userRepository);
     }
