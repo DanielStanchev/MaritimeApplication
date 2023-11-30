@@ -10,16 +10,42 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
+
+    /**
+     * Register User
+     * @param userDto The User data coming from UI used for registration
+     * @param bindingResult Manage data binding validation errors between a user input and validation annotations
+     * @param redirectAttributes Pass data of HTTP request then redirecting
+     */
     String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
+    /**
+     * Initialize the Admin upon application start
+     */
     void initAdmin();
 
+    /**
+     * Return User by id from DB
+     * @param username The id of certain user
+     */
     Optional<UserEntity> findUserByUsername(String username);
 
+    /**
+     *
+     * Return all User from DB
+     */
     List<UserEntity> findAll();
 
+    /**
+     * Return view of all employees/users
+     */
     List<UserDto> getAllEmployees();
 
+    /**
+     * Change the company position of User and keep history of the change
+     * @param userId The id of certain User
+     * @param position The company position of the User
+     */
     void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position);
 
 }

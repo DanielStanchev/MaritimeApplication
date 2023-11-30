@@ -104,7 +104,7 @@ class CertificateServiceImplTest {
 
         when(certificateRepository.findAll()).thenReturn(certificates);
 
-        certificateService.setNewStatusIfExpiredCertificate();
+        certificateService.checkIfCertificateExpiredAndChangeStatus();
 
         assertEquals(StatusEnum.EXPIRED, expiredCertificate.getStatus());
         assertNotEquals(StatusEnum.EXPIRED, validCertificate.getStatus());

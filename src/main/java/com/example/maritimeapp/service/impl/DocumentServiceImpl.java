@@ -122,7 +122,7 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public void expireDocuments() {
+    public void checkIfDocumentExpiredAndChangeStatus() {
         documentRepository.findAll().stream()
             .skip(2)
             .forEach(this::updateStatusIfExpired);

@@ -25,8 +25,8 @@ public class ShipCertificatesAndUserDocumentsExpiryScheduler {
     public void setNewStatusesIfExpired(){
         logger.info(String.format("Triggered scheduler at %s",LocalDateTime.now()));
 
-        documentService.expireDocuments();
-        certificateService.setNewStatusIfExpiredCertificate();
+        documentService.checkIfDocumentExpiredAndChangeStatus();
+        certificateService.checkIfCertificateExpiredAndChangeStatus();
     }
 
 }

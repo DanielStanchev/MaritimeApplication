@@ -53,7 +53,7 @@ public class CertificateServiceImpl implements CertificateService {
     }
 
     @Override
-    public void setNewStatusIfExpiredCertificate() {
+    public void checkIfCertificateExpiredAndChangeStatus() {
         certificateRepository.findAll()
             .forEach(this::updateStatusIfExpired);
     }

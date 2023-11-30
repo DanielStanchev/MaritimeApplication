@@ -6,8 +6,14 @@ import java.util.List;
 
 public interface UserPositionHistoryService {
 
+    /**
+     * Return all Users whose company position has been changed
+     */
     List<ChangePositionDto> getAllUsersWithChangedPosition();
 
+    /**
+     * Erase all position change history
+     */
     void deleteAllPositionChangeHistory();
 
 

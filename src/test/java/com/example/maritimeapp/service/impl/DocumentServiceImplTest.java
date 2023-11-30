@@ -1,14 +1,9 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.DocumentDto;
-import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.dto.UserDto;
-import com.example.maritimeapp.model.entity.CertificateEntity;
-import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.RoleEntity;
-import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
@@ -25,10 +20,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -196,7 +189,7 @@ class DocumentServiceImplTest {
 
         when(documentRepository.findAll()).thenReturn(documents);
 
-        documentServiceToTest.expireDocuments();
+        documentServiceToTest.checkIfDocumentExpiredAndChangeStatus();
 
         assertEquals(StatusEnum.EXPIRED, expiredDoc.getStatus());
         assertNotEquals(StatusEnum.EXPIRED, validDoc.getStatus());

@@ -23,16 +23,16 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public String add(ShipDto shipDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String add(ShipDto shipAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("shipAddDto", shipDto);
+            redirectAttributes.addFlashAttribute("shipAddDto", shipAddDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.shipAddDto", bindingResult);
 
             return "redirect:add";
         }
 
-        ShipEntity shipToSave = modelMapper.map(shipDto, ShipEntity.class);
+        ShipEntity shipToSave = modelMapper.map(shipAddDto, ShipEntity.class);
 
         shipRepository.save(shipToSave);
 

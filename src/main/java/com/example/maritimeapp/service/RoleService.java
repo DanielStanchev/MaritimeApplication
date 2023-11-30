@@ -6,7 +6,14 @@ import java.util.List;
 
 public interface RoleService {
 
+    /**
+     *
+     * Return all Roles persisted in the DB
+     */
     List<RoleEntity> findAll();
 
+    /**
+     * Initialize the Roles in DB
+     */
     void init();
 }
