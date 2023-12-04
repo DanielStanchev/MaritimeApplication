@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ShipService {
 
@@ -33,4 +34,6 @@ public interface ShipService {
      * @param shipId The id of a certain ship
      */
     void removeShip(Long shipId);
+
+    Optional<ShipEntity> findById(Long shipId);
 }

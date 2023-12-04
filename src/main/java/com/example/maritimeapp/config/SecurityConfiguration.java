@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfiguration {
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(
@@ -62,5 +61,4 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new Pbkdf2PasswordEncoder();
     }
-
 }

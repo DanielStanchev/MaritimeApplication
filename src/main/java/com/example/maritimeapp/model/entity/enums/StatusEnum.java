@@ -1,7 +1,6 @@
 package com.example.maritimeapp.model.entity.enums;
 
 public enum StatusEnum {
-
     VALID("Valid"),
     EXPIRED("Expired");
 

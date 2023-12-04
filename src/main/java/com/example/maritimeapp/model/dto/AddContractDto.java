@@ -1,7 +1,5 @@
 package com.example.maritimeapp.model.dto;
 
-import com.example.maritimeapp.model.entity.ShipEntity;
-import com.example.maritimeapp.model.entity.UserEntity;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.FutureOrPresent;
@@ -10,7 +8,7 @@ import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class ContractDto {
+public class AddContractDto {
 
     Long id;
 
@@ -28,11 +26,11 @@ public class ContractDto {
     @Positive
     private BigDecimal salary;
 
-    private UserDto employee;
+    private Long employeeId;
 
-    private ShipDto ship;
+    private Long shipId;
 
-    public ContractDto() {}
+    public AddContractDto() {}
 
     public Long getId() {
         return id;
@@ -66,19 +64,19 @@ public class ContractDto {
         this.salary = salary;
     }
 
-    public UserDto getEmployee() {
-        return employee;
+    public Long getEmployeeId() {
+        return employeeId;
     }
 
-    public void setEmployee(UserDto employee) {
-        this.employee = employee;
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public ShipDto getShip() {
-        return ship;
+    public Long getShipId() {
+        return shipId;
     }
 
-    public void setShip(ShipDto ship) {
-        this.ship = ship;
+    public void setShipId(Long shipId) {
+        this.shipId = shipId;
     }
 }

@@ -14,10 +14,10 @@ import java.time.LocalDate;
 @Table(name = "paid_leave")
 public class PaidLeaveEntity extends BaseEntity{
 
-    @Column(name = "date_from")
+    @Column(name = "date_from", nullable = false)
     private LocalDate dateFrom;
 
-    @Column(name = "date_to")
+    @Column(name = "date_to", nullable = false)
     private LocalDate dateTo;
 
     @ManyToOne

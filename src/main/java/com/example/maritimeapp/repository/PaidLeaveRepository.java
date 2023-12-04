@@ -10,5 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PaidLeaveRepository extends JpaRepository<PaidLeaveEntity,Long> {
+
     List<PaidLeaveEntity> findAllByEmployee(UserEntity employee);
 }

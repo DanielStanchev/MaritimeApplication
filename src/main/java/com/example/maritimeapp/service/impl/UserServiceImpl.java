@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,13 +41,18 @@ public class UserServiceImpl implements UserService {
         this.userPositionHistoryRepository = userPositionHistoryRepository;
     }
 
+    @PostConstruct
+    private void initAdmin() {
+        initAdminWithStartOfApp();
+    }
+
     @Override
     public String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors() || !userDto.getPassword()
             .equals(userDto.getConfirmPassword())) {
 
-            redirectAttributes.addFlashAttribute("userRegisterDto", userDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userRegisterDto", bindingResult);
+            redirectAttributes.addFlashAttribute("userDto", userDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userDto", bindingResult);
 
             return "redirect:register";
         }
@@ -62,19 +68,13 @@ public class UserServiceImpl implements UserService {
                                     .stream()
                                     .filter(r -> r.getRole()
                                         .equals(RoleEnum.USER))
-                                    .toList());
+                                    .collect(Collectors.toSet()));
 
             userRepository.save(userToSave);
             return "redirect:login";
         }
 
         return "redirect:register";
-    }
-
-    @Override
-    @PostConstruct
-    public void initAdmin() {
-        initAdminWithStartOfApp();
     }
 
     @Override
@@ -112,7 +112,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position) {
 
-        UserEntity user = userRepository.findById(userId).orElse(null);
+        UserEntity user =
+            userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException(String.format("User with ID %d doest not exist",userId)));
 
         UserPositionHistory changeOfPositionHistory = new UserPositionHistory();
         changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
@@ -122,6 +123,11 @@ public class UserServiceImpl implements UserService {
         changeOfPositionHistory.setDateOfChange(LocalDate.now());
         changeOfPositionHistory.setEmployees(user);
         userPositionHistoryRepository.save(changeOfPositionHistory);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     private void initAdminWithStartOfApp() {
@@ -138,8 +144,9 @@ public class UserServiceImpl implements UserService {
                                .stream()
                                .filter(r -> r.getRole()
                                    .equals(RoleEnum.ADMIN))
-                               .toList());
+                               .collect(Collectors.toSet()));
         userAdmin.setRegistryDate(LocalDateTime.now());
+        userAdmin.setPosition(PositionEnum.MASTER);
         userRepository.save(userAdmin);
     }
 

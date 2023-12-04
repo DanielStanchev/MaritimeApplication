@@ -81,7 +81,7 @@ public class PaidLeaveServiceImpl implements PaidLeaveService {
     public void changeStatusOfPaidLeaveAssessment(Long userId, PaidLeaveStatusEnum status) {
 
         final PaidLeaveEntity paidLeaveEntity = paidLeaveRepository.findById(userId)
-            .orElse(null);
+            .orElseThrow(()->new IllegalArgumentException(String.format("User with ID %d does not exist",userId)));
 
         paidLeaveEntity.setStatus(status);
         paidLeaveRepository.save(paidLeaveEntity);

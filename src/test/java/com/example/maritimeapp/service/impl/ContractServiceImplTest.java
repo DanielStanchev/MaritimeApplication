@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.AddContractDto;
 import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.dto.UserDto;
@@ -73,7 +74,7 @@ class ContractServiceImplTest {
         BindingResult bindingResult = mock(BindingResult.class);
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ContractDto contractDto = getContractDto();
+        AddContractDto contractDto = getAddContractDto();
 
         UserEntity employee = mock(UserEntity.class);
         RoleEntity adminE = new RoleEntity();
@@ -87,7 +88,7 @@ class ContractServiceImplTest {
         employee.setPassword("pesho");
         employee.setEmail("pesho@localhost");
         employee.setPosition(PositionEnum.THIRD_OFFICER);
-        employee.setRoles(List.of(adminE, userE));
+        employee.setRoles(Set.of(adminE, userE));
         employee.setContracts(Set.of(new ContractEntity(),new ContractEntity()));
         employee.setUserShip(new ShipEntity());
 
@@ -107,8 +108,8 @@ class ContractServiceImplTest {
         contractEntity.setShip(new ShipEntity());
 
         when(modelMapper.map(contractDto, ContractEntity.class)).thenReturn(contractEntity);
-        when(userService.findUserByUsername(contractDto.getEmployee().getUsername())).thenReturn(Optional.of(employee));
-        when(shipService.findShipByShipName(contractDto.getShip().getName())).thenReturn(shipEntity);
+        when(userService.findById(contractDto.getEmployeeId())).thenReturn(Optional.of(employee));
+        when(shipService.findById(contractDto.getShipId())).thenReturn(Optional.of(shipEntity));
 
         when(employee.getContracts()).thenReturn(new HashSet<>());
         when(shipEntity.getContracts()).thenReturn(new HashSet<>());
@@ -146,7 +147,7 @@ class ContractServiceImplTest {
         BindingResult bindingResult = mock(BindingResult.class);
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
-        ContractDto contractDto = getContractDto();
+        AddContractDto contractDto = getAddContractDto();
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
@@ -247,7 +248,7 @@ class ContractServiceImplTest {
         user.setPassword("pesho");
         user.setEmail("pesho@localhost");
         user.setPosition(PositionEnum.THIRD_OFFICER);
-        user.setRoles(List.of(adminE, userE));
+        user.setRoles(Set.of(adminE, userE));
         user.setContracts(Set.of(new ContractEntity(),new ContractEntity()));
         user.setUserShip(new ShipEntity());
         return user;
@@ -273,11 +274,11 @@ class ContractServiceImplTest {
         return contractEntity2;
     }
 
-    private ContractDto getContractDto() {
-        ContractDto contractDto = new ContractDto();
+    private AddContractDto getAddContractDto() {
+        AddContractDto contractDto = new AddContractDto();
         contractDto.setId(3L);
-        contractDto.setShip(new ShipDto());
-        contractDto.setEmployee(new UserDto());
+        contractDto.setShipId(4L);
+        contractDto.setEmployeeId(5L);
         contractDto.setSalary(BigDecimal.valueOf(2000));
         contractDto.setDisembarkDate(LocalDate.of(2024, 9, 13));
         contractDto.setStartDate(LocalDate.of(2023, 12, 30));

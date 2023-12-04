@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 public interface PaidLeaveService {
+
     /**
      * Schedule a paid leave and submit for approval
      * @param paidLeaveDto The paid leave data that is coming from the UI

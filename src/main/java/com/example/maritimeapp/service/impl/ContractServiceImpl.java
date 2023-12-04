@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.AddContractDto;
 import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.dto.UserDto;
@@ -14,8 +15,6 @@ import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -25,11 +24,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-
 @Service
 public class ContractServiceImpl implements ContractService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ContractServiceImpl.class);
 
     private final ModelMapper modelMapper;
     private final ContractRepository contractRepository;
@@ -44,37 +40,36 @@ public class ContractServiceImpl implements ContractService {
         this.contractRepository = contractRepository;
         this.userService = userService;
         this.shipService = shipService;
-
         this.usersSalaryHistoryRepository = usersSalaryHistoryRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public String addContract(ContractDto contractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addContract(AddContractDto addContractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("contractDto", contractDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.contractDto", bindingResult);
+            redirectAttributes.addFlashAttribute("addContractDto", addContractDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addContractDto", bindingResult);
 
             return "redirect:add";
         }
 
-        ContractEntity contractToSave = modelMapper.map(contractDto, ContractEntity.class);
+        ContractEntity contractToSave = modelMapper.map(addContractDto, ContractEntity.class);
 
-        UserEntity employee = userService.findUserByUsername(contractDto.getEmployee()
-                                                                 .getUsername())
-            .orElse(null);
+        UserEntity employee = userService.findById(addContractDto.getEmployeeId())
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Employee with ID: %d does not exist.",
+                                                                         addContractDto.getEmployeeId())));
 
-        ContractEntity existingContractForWantedDates =
-            contractRepository.findIfThereIsAlreadyExistingContractForGivenDates(employee.getUsername(), contractToSave.getStartDate(),
-                                                                                 contractToSave.getDisembarkDate()).orElse(null);
+        ContractEntity existingContract =
+            contractRepository.findIfThereIsAlreadyExistingContract(employee.getUsername(), contractToSave.getStartDate(),
+                                                                    contractToSave.getDisembarkDate()).orElse(null);
 
-        if (existingContractForWantedDates != null) {
+        if (existingContract != null) {
             redirectAttributes.addFlashAttribute("message", "Employee is still under ongoing contract!");
             return "redirect:add";
         }
 
-        ShipEntity currentShip = shipService.findShipByShipName(contractDto.getShip()
-                                                                    .getName());
+        ShipEntity currentShip = shipService.findById(addContractDto.getShipId())
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Ship with ID: %d does not exist.", addContractDto.getShipId())));
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
         Set<ContractEntity> contractsByShip = currentShip.getContracts();
@@ -118,7 +113,7 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void removeContract(Long contractId) {
         ContractEntity contract = contractRepository.findById(contractId)
-            .orElse(null);
+            .orElseThrow(()->new IllegalArgumentException(String.format("Contract with ID %d does not exist",contractId)));
 
         UserEntity user = userRepository.findUserEntityByContractsContains(contract);
 
@@ -148,14 +143,10 @@ public class ContractServiceImpl implements ContractService {
     public void payRaiseAndKeepHistory(Long contractId, BigDecimal bonusAmount) {
 
         final ContractEntity contract = contractRepository.findById(contractId)
-            .orElse(null);
+            .orElseThrow(()-> new IllegalArgumentException(String.format("Contract with ID %d does not exist",contractId)));
 
         UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
         changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
-        if (contract == null) {
-            logger.error("ERROR: Contract is NULL");
-            return;
-        }
 
         contract.setSalary(contract.getSalary()
                                .add(bonusAmount));

@@ -11,31 +11,31 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ships")
-public class ShipEntity extends BaseEntity{
+public class ShipEntity extends BaseEntity {
 
-    @Column(name = "name",nullable = false,unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "flag",nullable = false)
+    @Column(name = "flag", nullable = false)
     private String flag;
 
-    @Column(name = "capacity",nullable = false)
+    @Column(name = "capacity", nullable = false)
     private Integer capacity;
 
-    @Column(name = "registry_date",nullable = false)
+    @Column(name = "registry_date", nullable = false)
     private LocalDate registryDate;
 
-    @Column(name = "additional_info",columnDefinition = "TEXT")
+    @Column(name = "additional_info", columnDefinition = "TEXT")
     private String additionalInfo;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "userShip")
-    private Set<UserEntity> crewMember;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "userShip")
+    private Set<UserEntity> crewMember = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "ship")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ship")
     private Set<CertificateEntity> certificates = new HashSet<>();
 
-    @OneToMany(mappedBy = "ship",fetch = FetchType.EAGER)
-    private Set<ContractEntity> contracts;
+    @OneToMany(mappedBy = "ship", fetch = FetchType.EAGER)
+    private Set<ContractEntity> contracts = new HashSet<>();
 
     public ShipEntity() {
     }

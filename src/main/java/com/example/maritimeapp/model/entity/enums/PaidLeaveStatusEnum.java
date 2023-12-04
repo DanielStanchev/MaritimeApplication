@@ -1,7 +1,6 @@
 package com.example.maritimeapp.model.entity.enums;
 
 public enum PaidLeaveStatusEnum {
-
     PENDING("Pending"),
     APPROVED("Approved"),
     NOT_APPROVED("Not approved");

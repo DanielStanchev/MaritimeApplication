@@ -1,6 +1,7 @@
 package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
+import com.example.maritimeapp.model.dto.AddContractDto;
 import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
@@ -59,7 +60,7 @@ public class ContractController {
 
     @Secured(Role.ADMIN)
     @PostMapping("/add")
-    public String addContractConfirm(@Valid ContractDto contractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addContractConfirm(@Valid AddContractDto contractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         return contractService.addContract(contractDto, bindingResult, redirectAttributes);
     }
 
@@ -125,8 +126,8 @@ public class ContractController {
     }
 
     @ModelAttribute
-    public ContractDto contractDto() {
-        return new ContractDto();
+    public AddContractDto addContractDto() {
+        return new AddContractDto();
     }
 
 }

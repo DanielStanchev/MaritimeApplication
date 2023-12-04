@@ -18,11 +18,6 @@ public interface DocumentService {
     String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username);
 
     /**
-     * Initialize of the two types of documents in the DB
-     */
-    void initDocs();
-
-    /**
      * @param username The username of the logged User
      * @return All documents possessed by certain User
      */

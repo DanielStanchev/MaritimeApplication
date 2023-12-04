@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Table(name = "users_position_history")
 public class UserPositionHistory extends BaseEntity {
 
-    @Column(name = "previous_position")
+    @Column(name = "previous_position", nullable = false)
     private String previousPosition;
 
-    @Column(name = "new_position")
+    @Column(name = "new_position", nullable = false)
     private String newPosition;
 
     @Column(name = "date_of_change", nullable = false)

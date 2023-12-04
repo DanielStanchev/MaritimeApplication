@@ -10,7 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -18,16 +17,16 @@ import java.time.LocalDate;
 public class DocumentEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
-    @NotNull
+    @Column(name = "type", nullable = false)
     private DocumentTypeEnum type;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "issue_date")
+    @Column(name = "issue_date", nullable = false)
     private LocalDate issueDate;
 
-    @Column(name = "expiry_date")
+    @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 
     @ManyToOne

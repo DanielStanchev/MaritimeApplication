@@ -3,7 +3,6 @@ package com.example.maritimeapp.service.impl;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.RoleEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
-
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
 import com.example.maritimeapp.model.entity.enums.RoleEnum;
 import com.example.maritimeapp.repository.UserPositionHistoryRepository;
@@ -22,8 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -142,7 +142,7 @@ class UserServiceImplTestIT {
         user.setPassword("pesho");
         user.setEmail("pesho@localhost");
         user.setPosition(PositionEnum.THIRD_OFFICER);
-        user.setRoles(List.of(userE));
+        user.setRoles(Set.of(userE));
         return user;
     }
 

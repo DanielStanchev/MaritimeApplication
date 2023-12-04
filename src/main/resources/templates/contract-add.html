@@ -15,7 +15,7 @@
                     Prepare contract</strong></h1>
         </div>
         <div class="container bg-blur rounded p-5 mt-5 w-75">
-            <form  th:action="@{/contracts/add}"  th:method="post" th:object="${contractDto}"
+            <form  th:action="@{/contracts/add}"  th:method="post" th:object="${addContractDto}"
                   class=" text-center text-light">
 
                 <div th:if="${message}">
@@ -25,10 +25,10 @@
                 <div class="form-group row">
                     <label for="employee" class="col-sm-2 col-form-label">Employee</label>
                     <div class="col-sm-10">
-                        <select th:field="|*{employee.username}|" th:errorclass="is-invalid" id="employee" name="employee" class="custom-select"
+                        <select th:field="|*{employeeId}|" th:errorclass="is-invalid" id="employee" name="employee" class="custom-select"
                                 aria-describedby="employeeTypeHelpInline">
                             <option value="" selected>Employee</option>
-                            <option th:each="e : ${employees}" th:value="${e.username}" th:text="|${e.getFirstName()} ${e.getLastName()}|"></option>
+                            <option th:each="e : ${employees}" th:value="${e.id}" th:text="|${e.getFirstName()} ${e.getLastName()}|"></option>
                         </select>
                         <small id="employeeTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             You must select employee.
@@ -39,10 +39,10 @@
                 <div class="form-group row">
                     <label for="ship" class="col-sm-2 col-form-label">Ship name</label>
                     <div class="col-sm-10">
-                        <select th:field="*{ship.name}" th:errorclass="is-invalid" id="ship" name="ship" class="custom-select"
+                        <select th:field="*{shipId}" th:errorclass="is-invalid" id="ship" name="ship" class="custom-select"
                                 aria-describedby="shipTypeHelpInline">
                             <option value="" selected>Ship name</option>
-                            <option th:each="s : ${ships}" th:value="${s.name}" th:text="${s.name}"></option>
+                            <option th:each="s : ${ships}" th:value="${s.id}" th:text="${s.name}"></option>
                         </select>
                         <small id="shipTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             You must select ship.

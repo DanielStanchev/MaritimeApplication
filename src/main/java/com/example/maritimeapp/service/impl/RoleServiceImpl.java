@@ -10,8 +10,6 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.List;
 
-
-
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -19,9 +17,8 @@ public class RoleServiceImpl implements RoleService {
 
     public RoleServiceImpl(RoleRepository roleRepository) {this.roleRepository = roleRepository;}
 
-    @Override
     @PostConstruct
-    public void init() {
+    private void init() {
         initRoles();
     }
 

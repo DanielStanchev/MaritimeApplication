@@ -13,8 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 
@@ -81,7 +81,7 @@ class MaritimeAppUserDetailServiceTest {
         user.setUsername("pesho");
         user.setPassword("pesho");
         user.setEmail("pesho@pesho");
-        user.setRoles(List.of(adminE, userE));
+        user.setRoles(Set.of(adminE, userE));
 
         return user;
     }

@@ -18,21 +18,21 @@ import java.util.Set;
 @Service
 public class CertificateServiceImpl implements CertificateService {
 
-    private final CertificateRepository certificateRepository;
     private final ModelMapper modelMapper;
+    private final CertificateRepository certificateRepository;
     private final ShipService shipService;
 
-    public CertificateServiceImpl(CertificateRepository certificateRepository, ModelMapper modelMapper, ShipService shipService) {
-        this.certificateRepository = certificateRepository;
+    public CertificateServiceImpl(ModelMapper modelMapper, CertificateRepository certificateRepository, ShipService shipService) {
         this.modelMapper = modelMapper;
+        this.certificateRepository = certificateRepository;
         this.shipService = shipService;
     }
 
     @Override
     public String addCertificate(CertificateDto certificateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("certificateAddDto", certificateDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.certificateAddDto", bindingResult);
+            redirectAttributes.addFlashAttribute("certificateDto", certificateDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.certificateDto", bindingResult);
 
             return "redirect:add";
         }
@@ -60,6 +60,7 @@ public class CertificateServiceImpl implements CertificateService {
 
     private void updateStatusIfExpired(CertificateEntity certificate) {
         LocalDate expiry = certificate.getExpiryDate();
+
         if (expiry.isBefore(LocalDate.now())) {
             certificate.setStatus(StatusEnum.EXPIRED);
             certificateRepository.save(certificate);

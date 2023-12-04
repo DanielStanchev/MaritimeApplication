@@ -1,6 +1,5 @@
 package com.example.maritimeapp.model.entity;
 
-
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
 
 import javax.persistence.Column;
@@ -15,46 +14,49 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class UserEntity extends BaseEntity{
+public class UserEntity extends BaseEntity {
 
-    @Column(name = "username",unique = true,nullable = false)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "first_name",nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name",nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "password",nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "email",unique = true,nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "registry_date",nullable = false)
+    @Column(name = "registry_date", nullable = false)
     private LocalDateTime registryDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "position", nullable = false)
     private PositionEnum position;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "users_roles",
         joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<RoleEntity> roles;
+        inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "possessor")
-    private Set<DocumentEntity> documents;
+    private Set<DocumentEntity> documents = new HashSet<>();
 
-    @OneToMany(mappedBy = "possessor",fetch = FetchType.EAGER)
-    private Set<ContractEntity> contracts;
+    @OneToMany(mappedBy = "possessor", fetch = FetchType.EAGER)
+    private Set<ContractEntity> contracts = new HashSet<>();
 
     @ManyToOne
     private ShipEntity userShip;
@@ -102,11 +104,11 @@ public class UserEntity extends BaseEntity{
         this.position = position;
     }
 
-    public List<RoleEntity> getRoles() {
+    public Set<RoleEntity> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<RoleEntity> roles) {
+    public void setRoles(Set<RoleEntity> roles) {
         this.roles = roles;
     }
 

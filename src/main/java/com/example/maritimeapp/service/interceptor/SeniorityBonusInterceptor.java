@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.util.Map;
 
-
 @Component
 public class SeniorityBonusInterceptor implements HandlerInterceptor {
     private static final Logger logger = LoggerFactory.getLogger(SeniorityBonusInterceptor.class);
@@ -31,7 +30,6 @@ public class SeniorityBonusInterceptor implements HandlerInterceptor {
                                      UsersSalaryHistoryRepository usersSalaryHistoryRepository) {
         this.contractRepository = contractRepository;
         this.userRepository = userRepository;
-
         this.usersSalaryHistoryRepository = usersSalaryHistoryRepository;
     }
 
@@ -47,27 +45,21 @@ public class SeniorityBonusInterceptor implements HandlerInterceptor {
         }
 
         final Long contractId = Long.valueOf(pathVariables.get("contractId"));
-
         final ContractEntity contractNeeded = contractRepository.findById(contractId)
             .orElse(null);
 
-
         if (contractNeeded != null && contractNeeded.getNumberOfPayRaises() == 5) {
-
             final UserEntity employee = userRepository.findUserEntityByContractsContains(contractNeeded);
+            final UserSalaryHistory salaryToUpdate = usersSalaryHistoryRepository.findLatestByIdForEmployee(employee.getId()).
+                orElseThrow(() -> new IllegalStateException("User salary history cannot be null."));
 
-            final UserSalaryHistory salaryToUpdate = usersSalaryHistoryRepository.findLatestByIdForEmployee(employee.getId()).orElse(null);
-
-            contractNeeded.setSalary(contractNeeded.getSalary()
-                                         .add(BigDecimal.valueOf(500)));
-
+            contractNeeded.setSalary(contractNeeded.getSalary().add(BigDecimal.valueOf(500)));
             salaryToUpdate.setNewSalary(contractNeeded.getSalary());
-
 
             contractRepository.save(contractNeeded);
             usersSalaryHistoryRepository.save(salaryToUpdate);
 
-            logger.info("Bonus for 2nd pay raise given!");
+            logger.info("Bonus for 5th pay raise given!");
         }
     }
 }

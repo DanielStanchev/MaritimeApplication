@@ -18,8 +18,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -94,7 +95,7 @@ class UserPositionHistoryServiceImplTest {
         user.setLastName("pesho");
         user.setPassword("pesho");
         user.setEmail("pesho@localhost");
-        user.setRoles(List.of(adminE, userE));
+        user.setRoles(Set.of(adminE, userE));
         return user;
     }
 }

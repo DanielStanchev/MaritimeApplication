@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service;
 
+import com.example.maritimeapp.model.dto.AddContractDto;
 import com.example.maritimeapp.model.dto.ContractDto;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -15,7 +16,7 @@ public interface ContractService {
      * @param bindingResult Manage data binding validation errors between a user input and validation annotations
      * @param redirectAttributes Pass data of HTTP request then redirecting
      */
-    String addContract(ContractDto contractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
+    String addContract(AddContractDto contractDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     /**
      * Return all contracts of all Users

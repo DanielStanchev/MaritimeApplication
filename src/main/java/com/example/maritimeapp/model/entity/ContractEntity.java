@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @Table(name = "contracts")
 public class ContractEntity extends BaseEntity{
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "disembark_date")
+    @Column(name = "disembark_date", nullable = false)
     private LocalDate disembarkDate;
 
-    @Column(name = "salary")
+    @Column(name = "salary", nullable = false)
     private BigDecimal salary;
 
     @ManyToOne
@@ -26,8 +26,8 @@ public class ContractEntity extends BaseEntity{
     @ManyToOne
     private ShipEntity ship;
 
-    @Column(name = "number_of_pay_raises")
-    private int numberOfPayRaises;
+    @Column(name = "number_of_pay_raises", nullable = false)
+    private Integer numberOfPayRaises = 0;
 
     public ContractEntity() {
     }
@@ -72,11 +72,11 @@ public class ContractEntity extends BaseEntity{
         this.ship = ship;
     }
 
-    public int getNumberOfPayRaises() {
+    public Integer getNumberOfPayRaises() {
         return numberOfPayRaises;
     }
 
-    public void setNumberOfPayRaises(int numberOfPayRaises) {
+    public void setNumberOfPayRaises(Integer numberOfPayRaises) {
         this.numberOfPayRaises = numberOfPayRaises;
     }
 }

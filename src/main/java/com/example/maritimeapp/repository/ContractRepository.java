@@ -16,10 +16,9 @@ public interface ContractRepository extends JpaRepository<ContractEntity, Long> 
 
     List<ContractEntity> findAllByPossessor(UserEntity employee);
 
-
     @Query("SELECT c FROM ContractEntity c WHERE c.possessor.username = :username AND " +
         "(c.startDate BETWEEN :startDate AND :disembarkDate OR c.disembarkDate BETWEEN :startDate AND :disembarkDate)")
-    Optional<ContractEntity> findIfThereIsAlreadyExistingContractForGivenDates(@Param("username") String username,
-                                                                               @Param("startDate") LocalDate startDate,
-                                                                               @Param("disembarkDate") LocalDate disembarkDate);
+    Optional<ContractEntity> findIfThereIsAlreadyExistingContract(@Param("username") String username,
+                                                                  @Param("startDate") LocalDate startDate,
+                                                                  @Param("disembarkDate") LocalDate disembarkDate);
 }

@@ -12,18 +12,18 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "certificates")
-public class CertificateEntity extends BaseEntity{
+public class CertificateEntity extends BaseEntity {
 
-    @Column(name = "name",nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "start_date",nullable = false)
+    @Column(name = "start_date", nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "expiry_date",nullable = false)
+    @Column(name = "expiry_date", nullable = false)
     private LocalDate expiryDate;
 
     @Enumerated(EnumType.STRING)

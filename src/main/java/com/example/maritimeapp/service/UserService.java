@@ -20,11 +20,6 @@ public interface UserService {
     String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     /**
-     * Initialize the Admin upon application start
-     */
-    void initAdmin();
-
-    /**
      * Return User by id from DB
      * @param username The id of certain user
      */
@@ -48,4 +43,5 @@ public interface UserService {
      */
     void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position);
 
+    Optional<UserEntity> findById(Long userId);
 }

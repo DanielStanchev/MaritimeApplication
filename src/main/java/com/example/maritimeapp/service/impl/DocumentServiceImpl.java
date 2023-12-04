@@ -4,7 +4,6 @@ import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
-import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
 import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import com.example.maritimeapp.repository.DocumentRepository;
 import com.example.maritimeapp.service.DocumentService;
@@ -14,9 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.annotation.PostConstruct;
+
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -36,8 +34,8 @@ public class DocumentServiceImpl implements DocumentService {
     @Override
     public String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("documentAddDto", documentDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.documentAddDto", bindingResult);
+            redirectAttributes.addFlashAttribute("documentDto", documentDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.documentDto", bindingResult);
 
             return "redirect:add";
         }
@@ -52,22 +50,6 @@ public class DocumentServiceImpl implements DocumentService {
         documentToSave.setStatus(StatusEnum.VALID);
         documentRepository.save(documentToSave);
         return "redirect:/documents/show";
-    }
-
-    @Override
-    @PostConstruct
-    public void initDocs() {
-        if (documentRepository.count() != 0) {
-            return;
-        }
-
-        Arrays.stream(DocumentTypeEnum.values())
-            .forEach(docEnum -> {
-                DocumentEntity document = new DocumentEntity();
-                document.setType(docEnum);
-
-                documentRepository.save(document);
-            });
     }
 
     @Override
@@ -107,7 +89,6 @@ public class DocumentServiceImpl implements DocumentService {
     public List<DocumentDto> getAllDocuments() {
         return documentRepository.findAll()
             .stream()
-            .skip(2)
             .map(d -> {
                 UserEntity possessor = userService.findUserByUsername(d.getPossessor()
                                                                           .getUsername())
@@ -123,8 +104,7 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public void checkIfDocumentExpiredAndChangeStatus() {
-        documentRepository.findAll().stream()
-            .skip(2)
+        documentRepository.findAll()
             .forEach(this::updateStatusIfExpired);
     }
 

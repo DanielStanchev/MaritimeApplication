@@ -11,13 +11,13 @@ import java.time.LocalDate;
 @Table(name = "users_salary_history")
 public class UserSalaryHistory extends BaseEntity{
 
-    @Column(name = "previous_salary")
+    @Column(name = "previous_salary", nullable = false)
     private BigDecimal previousSalary;
 
-    @Column(name = "new_salary")
+    @Column(name = "new_salary", nullable = false)
     private BigDecimal newSalary;
 
-    @Column(name = "date_of_change",nullable = false)
+    @Column(name = "date_of_change", nullable = false)
     private LocalDate dateOfChange;
 
     @ManyToOne

@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShipServiceImpl implements ShipService {
@@ -23,16 +24,16 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public String add(ShipDto shipAddDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String add(ShipDto shipDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("shipAddDto", shipAddDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.shipAddDto", bindingResult);
+            redirectAttributes.addFlashAttribute("shipDto", shipDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.shipDto", bindingResult);
 
             return "redirect:add";
         }
 
-        ShipEntity shipToSave = modelMapper.map(shipAddDto, ShipEntity.class);
+        ShipEntity shipToSave = modelMapper.map(shipDto, ShipEntity.class);
 
         shipRepository.save(shipToSave);
 
@@ -58,9 +59,15 @@ public class ShipServiceImpl implements ShipService {
     @Override
     public void removeShip(Long shipId) {
 
-        ShipEntity ship = shipRepository.findById(shipId).orElse(null);
+        ShipEntity ship = shipRepository.findById(shipId)
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Ship with ID %d does not exist", shipId)));
 
-       shipRepository.delete(ship);
+        shipRepository.delete(ship);
+    }
+
+    @Override
+    public Optional<ShipEntity> findById(Long shipId) {
+        return shipRepository.findById(shipId);
     }
 }
 

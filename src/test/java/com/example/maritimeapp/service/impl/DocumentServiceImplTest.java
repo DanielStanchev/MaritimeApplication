@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -260,7 +261,7 @@ class DocumentServiceImplTest {
         user.setPassword("pesho");
         user.setEmail("pesho@localhost");
         user.setPosition(PositionEnum.THIRD_OFFICER);
-        user.setRoles(List.of(adminE, userE));
+        user.setRoles(Set.of(adminE, userE));
         return user;
     }
 
