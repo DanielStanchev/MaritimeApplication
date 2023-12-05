@@ -34,7 +34,7 @@ class ShipCertificatesAndUserDocumentsExpirySchedulerTest {
         @Test
         void testSetNewStatusesIfExpired() {
             scheduler.setNewStatusesIfExpired();
-            verify(documentService, times(1)).checkIfDocumentExpiredAndChangeStatus();
-            verify(certificateService, times(1)).checkIfCertificateExpiredAndChangeStatus();
+            verify(documentService, times(1)).changeDocumentStatusIfExpired();
+            verify(certificateService, times(1)).changeCertificateStatusIfExpired();
         }
     }

@@ -34,7 +34,7 @@ public class ShipController {
     @PostMapping("/add")
     public String addConfirm(@Valid ShipDto shipDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        return shipService.add(shipDto, bindingResult, redirectAttributes);
+        return shipService.addShip(shipDto, bindingResult, redirectAttributes);
     }
 
     @GetMapping("/show")
@@ -46,9 +46,8 @@ public class ShipController {
     }
 
     @DeleteMapping ("/{shipId}/remove")
-    public String removeShip(@PathVariable("shipId") Long shipId) {
-
-        shipService.removeShip(shipId);
+    public String removeShip(@PathVariable("shipId") Long shipId,RedirectAttributes redirectAttributes) {
+        shipService.removeShip(shipId,redirectAttributes);
         return "redirect:/ships/show";
     }
 
@@ -56,6 +55,5 @@ public class ShipController {
     public ShipDto shipAddDto() {
         return new ShipDto();
     }
-
 
 }

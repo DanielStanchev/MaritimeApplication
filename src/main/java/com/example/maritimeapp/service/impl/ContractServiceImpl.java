@@ -56,12 +56,11 @@ public class ContractServiceImpl implements ContractService {
         ContractEntity contractToSave = modelMapper.map(addContractDto, ContractEntity.class);
 
         UserEntity employee = userService.findById(addContractDto.getEmployeeId())
-            .orElseThrow(() -> new IllegalArgumentException(String.format("Employee with ID: %d does not exist.",
-                                                                         addContractDto.getEmployeeId())));
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Employee with ID: %d does not exist.", addContractDto.getEmployeeId())));
 
-        ContractEntity existingContract =
-            contractRepository.findIfThereIsAlreadyExistingContract(employee.getUsername(), contractToSave.getStartDate(),
-                                                                    contractToSave.getDisembarkDate()).orElse(null);
+        ContractEntity existingContract = contractRepository.findIfThereIsAlreadyExistingContract(employee.getId(), contractToSave.getStartDate(),
+                                                                                                  contractToSave.getDisembarkDate())
+            .orElse(null);
 
         if (existingContract != null) {
             redirectAttributes.addFlashAttribute("message", "Employee is still under ongoing contract!");
@@ -70,16 +69,19 @@ public class ContractServiceImpl implements ContractService {
 
         ShipEntity currentShip = shipService.findById(addContractDto.getShipId())
             .orElseThrow(() -> new IllegalArgumentException(String.format("Ship with ID: %d does not exist.", addContractDto.getShipId())));
+
         Set<ContractEntity> contractsByUser = employee.getContracts();
         contractsByUser.add(contractToSave);
+
         Set<ContractEntity> contractsByShip = currentShip.getContracts();
         contractsByShip.add(contractToSave);
+
         Set<UserEntity> crew = currentShip.getCrewMember();
         crew.add(employee);
+
         employee.setUserShip(currentShip);
         contractToSave.setPossessor(employee);
         contractToSave.setShip(currentShip);
-
 
         contractRepository.save(contractToSave);
         userRepository.save(employee);
@@ -88,23 +90,15 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractDto> getAllContracts() {
-
         return contractRepository.findAll()
             .stream()
             .map(c -> {
                 ContractDto contractToShow = modelMapper.map(c, ContractDto.class);
 
-                UserEntity possessor = userService.findUserByUsername(c.getPossessor()
-                                                                          .getUsername())
-                    .orElse(null);
+                contractToShow.setEmployee(modelMapper.map(c.getPossessor(), UserDto.class));
+                contractToShow.setShip(modelMapper.map(c.getShip(), ShipDto.class));
 
-                ShipEntity ship = shipService.findShipByShipName(c.getShip()
-                                                                     .getName());
-
-                contractToShow.setEmployee(modelMapper.map(possessor, UserDto.class));
-                contractToShow.setShip(modelMapper.map(ship, ShipDto.class));
                 return contractToShow;
-
             })
             .toList();
 
@@ -113,20 +107,17 @@ public class ContractServiceImpl implements ContractService {
     @Override
     public void removeContract(Long contractId) {
         ContractEntity contract = contractRepository.findById(contractId)
-            .orElseThrow(()->new IllegalArgumentException(String.format("Contract with ID %d does not exist",contractId)));
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Contract with ID %d does not exist", contractId)));
 
         UserEntity user = userRepository.findUserEntityByContractsContains(contract);
-
         user.setUserShip(null);
 
         userRepository.save(user);
         contractRepository.delete(contract);
-
     }
 
     @Override
     public List<ContractDto> getContractsByUser(String username) {
-
         UserEntity employee = userService.findUserByUsername(username)
             .orElse(null);
         return contractRepository.findAllByPossessor(employee)
@@ -140,21 +131,21 @@ public class ContractServiceImpl implements ContractService {
     }
 
     @Override
-    public void payRaiseAndKeepHistory(Long contractId, BigDecimal bonusAmount) {
-
+    public void payRaise(Long contractId, BigDecimal bonusAmount) {
         final ContractEntity contract = contractRepository.findById(contractId)
-            .orElseThrow(()-> new IllegalArgumentException(String.format("Contract with ID %d does not exist",contractId)));
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Contract with ID %d does not exist", contractId)));
 
         UserSalaryHistory changeOfSalaryHistory = new UserSalaryHistory();
         changeOfSalaryHistory.setPreviousSalary(contract.getSalary());
 
-        contract.setSalary(contract.getSalary()
-                               .add(bonusAmount));
+        contract.setSalary(contract.getSalary().add(bonusAmount));
         contract.setNumberOfPayRaises(contract.getNumberOfPayRaises() + 1);
         contractRepository.save(contract);
+
         changeOfSalaryHistory.setNewSalary(contract.getSalary());
         changeOfSalaryHistory.setDateOfChange(LocalDate.now());
-        changeOfSalaryHistory.setEmployees(contract.getPossessor());
+        changeOfSalaryHistory.setEmployee(contract.getPossessor());
         usersSalaryHistoryRepository.save(changeOfSalaryHistory);
     }
+
 }

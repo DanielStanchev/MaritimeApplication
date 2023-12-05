@@ -22,7 +22,7 @@ public class MaritimeAppUserDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByUsername(username)
             .map(MaritimeAppUserDetailService::map)
-            .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found!"));
+            .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found!", username)));
     }
 
     private static UserDetails map(UserEntity userEntity) {
@@ -36,7 +36,6 @@ public class MaritimeAppUserDetailService implements UserDetailsService {
     }
 
     private static GrantedAuthority map(RoleEntity role) {
-        return new SimpleGrantedAuthority("ROLE_" + role.getRole()
-            .name());
+        return new SimpleGrantedAuthority("ROLE_" + role.getRole().name());
     }
 }

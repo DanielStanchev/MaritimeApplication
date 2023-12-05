@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service;
 
+import com.example.maritimeapp.model.dto.AddDocumentDto;
 import com.example.maritimeapp.model.dto.DocumentDto;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -15,7 +16,7 @@ public interface DocumentService {
      * @param redirectAttributes Pass data of HTTP request then redirecting
      * @param username The username of the logged User
      */
-    String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username);
+    String addDocument(AddDocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, String username);
 
     /**
      * @param username The username of the logged User
@@ -38,5 +39,5 @@ public interface DocumentService {
     /**
      * Check if certain document expired and change status to Expired
      */
-    void checkIfDocumentExpiredAndChangeStatus();
+    void changeDocumentStatusIfExpired();
 }

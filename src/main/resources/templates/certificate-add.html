@@ -42,10 +42,10 @@
                 <div class="form-group row">
                     <label for="ship" class="col-sm-2 col-form-label">Ship name</label>
                     <div class="col-sm-10">
-                        <select th:field="*{ship.name}" th:errorclass="is-invalid" id="ship" name="ship" class="custom-select"
+                        <select th:field="*{shipId}" th:errorclass="is-invalid" id="ship" name="ship" class="custom-select"
                                 aria-describedby="shipTypeHelpInline">
                             <option value="" selected>Ship name</option>
-                            <option th:each="s : ${ships}" th:value="${s.name}" th:text="${s.name}"></option>
+                            <option th:each="s : ${ships}" th:value="${s.id}" th:text="${s.name}"></option>
                         </select>
                         <small id="shipTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
                             You must select ship.

@@ -39,7 +39,8 @@ public class CertificateServiceImpl implements CertificateService {
 
         CertificateEntity certificateToSave = modelMapper.map(certificateDto, CertificateEntity.class);
 
-        ShipEntity currentShip = shipService.findShipByShipName(certificateDto.getShip().getName());
+        ShipEntity currentShip = shipService.findById(certificateDto.getShipId())
+            .orElseThrow(() -> new IllegalArgumentException(String.format("No ship with ID: %d exists", certificateDto.getShipId())));
 
         Set<CertificateEntity> certificates = currentShip.getCertificates();
         certificates.add(certificateToSave);
@@ -48,12 +49,11 @@ public class CertificateServiceImpl implements CertificateService {
         certificateToSave.setStatus(StatusEnum.VALID);
 
         certificateRepository.save(certificateToSave);
-
         return "redirect:/";
     }
 
     @Override
-    public void checkIfCertificateExpiredAndChangeStatus() {
+    public void changeCertificateStatusIfExpired() {
         certificateRepository.findAll()
             .forEach(this::updateStatusIfExpired);
     }

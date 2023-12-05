@@ -40,7 +40,7 @@ class ShipServiceImplTest {
 
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        String result = shipServiceToTest.add(shipDto, bindingResult, redirectAttributes);
+        String result = shipServiceToTest.addShip(shipDto, bindingResult, redirectAttributes);
 
         assertEquals("redirect:show", result);
     }
@@ -55,7 +55,7 @@ class ShipServiceImplTest {
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        String result = shipServiceToTest.add(shipDto, bindingResult, redirectAttributes);
+        String result = shipServiceToTest.addShip(shipDto, bindingResult, redirectAttributes);
 
         assertEquals("redirect:add", result);
     }
@@ -74,12 +74,12 @@ class ShipServiceImplTest {
         sampleShip.setFlag("Malta");
         sampleShip.setAdditionalInfo("No info");
 
-        when(shipRepository.findShipEntitiesByName(shipName)).thenReturn(Optional.of(sampleShip));
+        when(shipRepository.findById(sampleShip.getId())).thenReturn(Optional.of(sampleShip));
 
-        ShipEntity foundShip = shipServiceToTest.findShipByShipName(shipName);
+        Optional<ShipEntity> foundShip = shipServiceToTest.findById(sampleShip.getId());
 
         assertNotNull(foundShip);
-        assertEquals(shipName, foundShip.getName());
+        assertEquals(shipName, foundShip.get().getName());
     }
 
     @Test
@@ -103,7 +103,9 @@ class ShipServiceImplTest {
 
         when(shipRepository.findById(shipIdToRemove)).thenReturn(Optional.of(shipEntityToRemove));
 
-        shipServiceToTest.removeShip(shipIdToRemove);
+        RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
+
+        shipServiceToTest.removeShip(shipIdToRemove,redirectAttributes);
 
         verify(shipRepository, times(1)).delete(shipEntityToRemove);
     }

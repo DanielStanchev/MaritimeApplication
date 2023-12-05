@@ -62,7 +62,7 @@ class UserServiceImplTestIT {
         UserDto userDto = getUserDto();
         when(bindingResult.hasErrors()).thenReturn(false);
         when(modelMapper.map(any(UserDto.class), eq(UserEntity.class))).thenReturn(new UserEntity());
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.empty());
+        when(userRepository.findUserByUsernameOrEmail(anyString(), anyString())).thenReturn(Optional.empty());
         String result = userServiceToTest.register(userDto, bindingResult, redirectAttributes);
         assertEquals("redirect:login", result);
     }
@@ -83,7 +83,7 @@ class UserServiceImplTestIT {
         UserDto userDto = getUserDto();
         when(bindingResult.hasErrors()).thenReturn(false);
         when(modelMapper.map(any(UserDto.class), eq(UserEntity.class))).thenReturn(new UserEntity());
-        when(userRepository.findUserByEmail(anyString())).thenReturn(Optional.of(new UserEntity()));
+        when(userRepository.findUserByUsernameOrEmail(anyString(), anyString())).thenReturn(Optional.of(new UserEntity()));
         String result = userServiceToTest.register(userDto, bindingResult, redirectAttributes);
         assertEquals("redirect:register", result);
     }
@@ -113,7 +113,7 @@ class UserServiceImplTestIT {
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         UserEntity existingUser = userRepository.findById(user.getId())
             .orElse(null);
-        userServiceToTest.changePositionOfUserAndKeepHistory(existingUser.getId(), newPosition);
+        userServiceToTest.changePositionOfUser(existingUser.getId(), newPosition);
         assertEquals(newPosition.getDescription(), user.getPosition()
             .getDescription());
     }

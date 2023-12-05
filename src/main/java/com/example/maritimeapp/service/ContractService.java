@@ -40,5 +40,5 @@ public interface ContractService {
      * @param contractId Certain contract of User
      * @param bonusAmount The amount that is to be given on top the salary of certain User
      */
-    void payRaiseAndKeepHistory(Long contractId, BigDecimal bonusAmount);
+    void payRaise(Long contractId, BigDecimal bonusAmount);
 }

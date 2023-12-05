@@ -37,7 +37,7 @@
                                     <select th:name="status" id="ship" name="ship"
                                             class="custom-select"
                                             aria-describedby="shipTypeHelpInline">
-                                        <option value="" selected th:text="*{a.getStatus().description}">Pending</option>
+                                        <option value="" disabled selected hidden>Choose a status</option>
                                         <option th:each="s : ${allStatuses}" th:value="${s.name()}"
                                                 th:text="${s.description}"></option>
                                     </select>
@@ -55,7 +55,6 @@
         </div>
 
         <hr class="bg-light">
-    </div>
 </main>
 <footer th:replace="fragments/commons::footer"></footer>
 </body>

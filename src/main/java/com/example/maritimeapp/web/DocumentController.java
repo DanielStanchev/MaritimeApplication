@@ -2,6 +2,7 @@ package com.example.maritimeapp.web;
 
 
 import com.example.maritimeapp.constants.Role;
+import com.example.maritimeapp.model.dto.AddDocumentDto;
 import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.service.DocumentService;
 import com.example.maritimeapp.util.SecurityUtl;
@@ -35,9 +36,9 @@ public class DocumentController {
     }
 
     @PostMapping("/add")
-    public String addDocumentConfirm(@Valid DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String addDocumentConfirm(@Valid AddDocumentDto addDocumentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         User loggedInUser = SecurityUtl.getLoggedInUser();
-        return documentService.addDocument(documentDto, bindingResult, redirectAttributes,loggedInUser.getUsername());
+        return documentService.addDocument(addDocumentDto, bindingResult, redirectAttributes,loggedInUser.getUsername());
     }
 
     @GetMapping("/show")
@@ -68,9 +69,7 @@ public class DocumentController {
     }
 
     @ModelAttribute
-    public DocumentDto documentAddDto() {
-        return new DocumentDto();
+    public AddDocumentDto addDocumentDto() {
+        return new AddDocumentDto();
     }
-
-
 }

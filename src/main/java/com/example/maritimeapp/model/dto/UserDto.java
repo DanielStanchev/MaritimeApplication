@@ -3,6 +3,7 @@ package com.example.maritimeapp.model.dto;
 import com.example.maritimeapp.model.entity.enums.PositionEnum;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -20,6 +21,7 @@ public class UserDto {
     private String lastName;
 
     @Email
+    @NotBlank
     private String email;
 
     @Size(min = 3)

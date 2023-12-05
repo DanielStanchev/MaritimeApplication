@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.AddDocumentDto;
 import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
@@ -62,12 +63,12 @@ class DocumentServiceImplTest {
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        DocumentDto documentDto = new DocumentDto();
+        AddDocumentDto addDocumentDto = new AddDocumentDto();
         DocumentEntity document = new DocumentEntity();
         document.setId(1L);
         document.setPossessor(new UserEntity());
 
-        String result = documentServiceToTest.addDocument(documentDto, bindingResult, redirectAttributes, document.getPossessor()
+        String result = documentServiceToTest.addDocument(addDocumentDto, bindingResult, redirectAttributes, document.getPossessor()
             .getUsername());
 
         assertEquals("redirect:add", result);
@@ -76,7 +77,7 @@ class DocumentServiceImplTest {
     @Test
     void testAddDocumentSuccess() {
 
-        DocumentDto documentDto = getDocumentDto();
+        AddDocumentDto addDocumentDto = getAddDocumentDto();
 
         DocumentEntity document = getDocumentEntity1();
 
@@ -91,7 +92,7 @@ class DocumentServiceImplTest {
 
         when(documentRepository.save(any(DocumentEntity.class))).thenReturn(new DocumentEntity());
 
-        String result = documentServiceToTest.addDocument(documentDto, bindingResult, redirectAttributes, document.getPossessor().getUsername());
+        String result = documentServiceToTest.addDocument(addDocumentDto, bindingResult, redirectAttributes, document.getPossessor().getUsername());
 
         assertEquals("redirect:/documents/show", result);
     }
@@ -143,15 +144,13 @@ class DocumentServiceImplTest {
     void testGetAllDocumentsIfRepoIsNotEmpty(){
 
         List<DocumentEntity> docs = new ArrayList<>();
-        docs.add(new DocumentEntity());
-        docs.add(new DocumentEntity());
         docs.add(getDocumentEntity1());
         docs.add(getDocumentEntity2());
 
         when(documentRepository.findAll()).thenReturn(docs);
 
         UserEntity possessor = getUserEntity();
-        when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(possessor));
+        when(userService.findById(possessor.getId())).thenReturn(Optional.of(possessor));
 
         DocumentDto documentDto = new DocumentDto();
         documentDto.setId(1L);
@@ -166,14 +165,6 @@ class DocumentServiceImplTest {
     void testExpireDocuments() {
         LocalDate now = LocalDate.now();
 
-       DocumentEntity documentEntity1  = new DocumentEntity();
-       documentEntity1.setId(1L);
-       documentEntity1.setExpiryDate(now.plusDays(5));
-
-       DocumentEntity documentEntity2  = new DocumentEntity();
-        documentEntity1.setId(2L);
-        documentEntity1.setExpiryDate(now.plusDays(5));
-
         DocumentEntity expiredDoc = new DocumentEntity();
         expiredDoc.setId(3L);
         expiredDoc.setExpiryDate(now.minusDays(2));
@@ -183,14 +174,12 @@ class DocumentServiceImplTest {
         validDoc.setExpiryDate(now.plusDays(2));
 
         List<DocumentEntity> documents = new ArrayList<>();
-        documents.add(documentEntity1);
-        documents.add(documentEntity2);
         documents.add(expiredDoc);
         documents.add(validDoc);
 
         when(documentRepository.findAll()).thenReturn(documents);
 
-        documentServiceToTest.checkIfDocumentExpiredAndChangeStatus();
+        documentServiceToTest.changeDocumentStatusIfExpired();
 
         assertEquals(StatusEnum.EXPIRED, expiredDoc.getStatus());
         assertNotEquals(StatusEnum.EXPIRED, validDoc.getStatus());
@@ -222,15 +211,16 @@ class DocumentServiceImplTest {
         return documentEntity2;
     }
 
-    private DocumentDto getDocumentDto() {
-        DocumentDto documentDto = new DocumentDto();
+    private AddDocumentDto getAddDocumentDto() {
+        AddDocumentDto documentDto = new AddDocumentDto();
+
         documentDto.setId(1L);
-        documentDto.setDocumentType(DocumentTypeEnum.CERTIFICATE_FOR_OFFICERS);
-        documentDto.setPossessor(getUserDto());
+        documentDto.setType(DocumentTypeEnum.CERTIFICATE_FOR_OFFICERS);
         documentDto.setStatus(StatusEnum.VALID);
         documentDto.setDescription("No description");
         documentDto.setExpiryDate(LocalDate.of(2024, 11, 10));
         documentDto.setIssueDate(LocalDate.of(2010, 11, 10));
+
         return documentDto;
     }
 

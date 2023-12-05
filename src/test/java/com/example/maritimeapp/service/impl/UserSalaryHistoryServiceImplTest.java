@@ -54,7 +54,7 @@ class UserSalaryHistoryServiceImplTest {
         when(usersSalaryHistoryRepository.findAll()).thenReturn(users);
 
         UserEntity user = getUserEntity();
-        when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userService.findById(user.getId())).thenReturn(Optional.of(user));
 
         PayRaiseDto payRaiseDto = new PayRaiseDto();
         payRaiseDto.setId(1L);
@@ -78,7 +78,7 @@ class UserSalaryHistoryServiceImplTest {
         user.setDateOfChange(LocalDate.of(2024, 9, 12));
         user.setPreviousSalary(BigDecimal.valueOf(1000));
         user.setNewSalary(BigDecimal.valueOf(2000));
-        user.setEmployees(getUserEntity());
+        user.setEmployee(getUserEntity());
         return user;
 
     }

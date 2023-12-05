@@ -59,7 +59,7 @@
                 <div class="bg-dark rounded m-auto" style="height: 40vh; overflow: auto">
                     <table class="table table-striped table-dark">
                         <tr th:each="e : ${getUpdatedUsers}">
-                            <td th:text="|User name : *{e.getUserName().firstName} *{e.getUserName().lastName}|"></td>
+                            <td th:text="|User name : *{e.getUser().getFirstName()} *{e.getUser().lastName}|"></td>
                             <td th:text="|Previous position: *{e.getPreviousPosition()}|"></td>
                             <td th:text="|New position : *{e.getNewPosition()}|"></td>
                             <td th:text="|Date of change : *{e.getDateOfChange()}|"></td>

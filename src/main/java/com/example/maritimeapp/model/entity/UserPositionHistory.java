@@ -2,6 +2,7 @@ package com.example.maritimeapp.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class UserPositionHistory extends BaseEntity {
     private LocalDate dateOfChange;
 
     @ManyToOne
-    private UserEntity employees;
+    private UserEntity employee;
 
     public UserPositionHistory() {
     }
@@ -49,11 +50,11 @@ public class UserPositionHistory extends BaseEntity {
         this.dateOfChange = dateOfChange;
     }
 
-    public UserEntity getEmployees() {
-        return employees;
+    public UserEntity getEmployee() {
+        return employee;
     }
 
-    public void setEmployees(UserEntity employees) {
-        this.employees = employees;
+    public void setEmployee(UserEntity employees) {
+        this.employee = employees;
     }
 }

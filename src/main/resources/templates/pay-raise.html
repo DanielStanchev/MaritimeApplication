@@ -53,7 +53,7 @@
                 <div class="bg-dark rounded m-auto" style="height: 40vh; overflow: auto">
                     <table class="table table-striped table-dark">
                         <tr th:each="e : ${getUsersWithRaise}">
-                            <td th:text="|User name : *{e.getUserName().firstName} *{e.getUserName().lastName}|"></td>
+                            <td th:text="|User name : *{e.getEmployee().getFirstName()} *{e.getEmployee().getLastName()}|"></td>
                             <td th:text="|Previous salary: *{e.getPreviousSalary()}|"></td>
                             <td th:text="|New salary : *{e.getNewSalary()}|"></td>
                             <td th:text="|Date of change : *{e.getDateOfChange()}|"></td>

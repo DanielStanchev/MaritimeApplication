@@ -24,8 +24,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public String add(ShipDto shipDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+    public String addShip(ShipDto shipDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("shipDto", shipDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.shipDto", bindingResult);
@@ -41,15 +40,7 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public ShipEntity findShipByShipName(String name) {
-
-        return shipRepository.findShipEntitiesByName(name)
-            .orElse(null);
-    }
-
-    @Override
     public List<ShipDto> getShips() {
-
         return shipRepository.findAll()
             .stream()
             .map(s -> modelMapper.map(s, ShipDto.class))
@@ -57,17 +48,22 @@ public class ShipServiceImpl implements ShipService {
     }
 
     @Override
-    public void removeShip(Long shipId) {
-
+    public void removeShip(Long shipId, RedirectAttributes redirectAttributes) {
         ShipEntity ship = shipRepository.findById(shipId)
             .orElseThrow(() -> new IllegalArgumentException(String.format("Ship with ID %d does not exist", shipId)));
 
-        shipRepository.delete(ship);
+        if (!ship.getContracts().isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage",
+                                                 "Ship has assigned employee contracts. Before delete you should first manage the contracts !");
+        } else {
+            shipRepository.delete(ship);
+        }
     }
 
     @Override
     public Optional<ShipEntity> findById(Long shipId) {
         return shipRepository.findById(shipId);
     }
+
 }
 

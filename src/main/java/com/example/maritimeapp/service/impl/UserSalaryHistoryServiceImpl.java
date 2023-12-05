@@ -29,13 +29,9 @@ public class UserSalaryHistoryServiceImpl implements UserSalaryHistoryService {
         return usersSalaryHistoryRepository.findAll()
             .stream()
             .map(u -> {
-
-                UserEntity user = userService.findUserByUsername(u.getEmployees()
-                                                                     .getUsername())
-                    .orElse(null);
-
                 PayRaiseDto changedUser = modelMapper.map(u, PayRaiseDto.class);
-                changedUser.setUserName(modelMapper.map(user, UserDto.class));
+                changedUser.setEmployee(modelMapper.map(u.getEmployee(), UserDto.class));
+
                 return changedUser;
             })
             .toList();

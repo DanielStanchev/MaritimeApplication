@@ -22,12 +22,10 @@ public class RoleServiceImpl implements RoleService {
         initRoles();
     }
 
-
     @Override
     public List<RoleEntity> findAll() {
         return roleRepository.findAll();
     }
-
 
     private void initRoles() {
         if (roleRepository.count() != 0) {

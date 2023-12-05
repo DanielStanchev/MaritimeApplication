@@ -78,6 +78,9 @@
                     <div class="col-sm-10">
                         <input th:field="*{salary}" th:errorclass="is-invalid" type="number" class="form-control" id="salary"
                                aria-describedby="salaryHelpInline" placeholder="salary">
+                        <small id="salaryHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                            You must enter salary in field !
+                        </small>
                     </div>
                 </div>
 

@@ -38,9 +38,9 @@ class MaritimeAppUserDetailServiceTest {
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstName("Pesho");
 
-        when(mockUserRepository.findUserByEmail("test@test")).thenReturn(Optional.of(userEntity));
+        when(mockUserRepository.findUserByUsernameOrEmail("pesho","test@test")).thenReturn(Optional.of(userEntity));
 
-        Optional<UserEntity> userOpt = mockUserRepository.findUserByEmail("test@test");
+        Optional<UserEntity> userOpt = mockUserRepository.findUserByUsernameOrEmail("pehso", "test@test");
 
         UserEntity user = userOpt.get();
 

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -50,13 +51,13 @@ class CertificateServiceImplTest {
         CertificateDto certificateDto = new CertificateDto();
         ShipDto shipDto = new ShipDto();
         shipDto.setName("Kenan T");
-        certificateDto.setShip(shipDto);
+        certificateDto.setShipId(shipDto.getId());
 
         BindingResult bindingResult = mock(BindingResult.class);
         RedirectAttributes redirectAttributes = mock(RedirectAttributes.class);
 
         ShipEntity mockShip = new ShipEntity();
-        when(shipService.findShipByShipName(any(String.class))).thenReturn(mockShip);
+        when(shipService.findById(mockShip.getId())).thenReturn(Optional.of(mockShip));
 
         CertificateEntity mockCertificateEntity = new CertificateEntity();
         when(modelMapper.map(any(CertificateDto.class), any(Class.class))).thenReturn(mockCertificateEntity);
@@ -76,7 +77,7 @@ class CertificateServiceImplTest {
         CertificateDto certificateDto = new CertificateDto();
         ShipDto shipDto = new ShipDto();
         shipDto.setName("Kenan T");
-        certificateDto.setShip(shipDto);
+        certificateDto.setShipId(shipDto.getId());
 
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -104,7 +105,7 @@ class CertificateServiceImplTest {
 
         when(certificateRepository.findAll()).thenReturn(certificates);
 
-        certificateService.checkIfCertificateExpiredAndChangeStatus();
+        certificateService.changeCertificateStatusIfExpired();
 
         assertEquals(StatusEnum.EXPIRED, expiredCertificate.getStatus());
         assertNotEquals(StatusEnum.EXPIRED, validCertificate.getStatus());

@@ -14,8 +14,13 @@
                     vessels</strong></h1>
         </div>
 
+
+
         <!--        <div class="row mt-3 mb-3">-->
         <div class="container bg-blur rounded p-4 mt-1 w-75">
+            <div th:if="${errorMessage}">
+                <p th:text="${errorMessage}" class="bg-blur alert bg-danger text-center" ></p>
+            </div>
             <h3 class="mySticky bg-gray text-light rounded text-center"
                 th:text="|Total Ships: *{ships.size()}|"></h3>
             <div class="col-5 bg-dark rounded m-auto" style="height: 80vh; overflow: auto">

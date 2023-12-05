@@ -20,7 +20,7 @@ public interface UserService {
     String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
 
     /**
-     * Return User by id from DB
+     * Return User by username from DB
      * @param username The id of certain user
      */
     Optional<UserEntity> findUserByUsername(String username);
@@ -41,7 +41,11 @@ public interface UserService {
      * @param userId The id of certain User
      * @param position The company position of the User
      */
-    void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position);
+    void changePositionOfUser(Long userId, PositionEnum position);
 
+    /**
+     * Return User bi ID from DB
+     * @param userId The ID of certain user
+     */
     Optional<UserEntity> findById(Long userId);
 }

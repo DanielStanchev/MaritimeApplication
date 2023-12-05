@@ -4,7 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-public class ChangePositionDto {
+public class ChangePositionHistoryDto {
 
     private Long id;
 
@@ -15,9 +15,9 @@ public class ChangePositionDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfChange;
 
-    private UserDto userName;
+    private UserDto user;
 
-    public ChangePositionDto() {
+    public ChangePositionHistoryDto() {
     }
 
     public Long getId() {
@@ -52,11 +52,11 @@ public class ChangePositionDto {
         this.dateOfChange = dateOfChange;
     }
 
-    public UserDto getUserName() {
-        return userName;
+    public UserDto getUser() {
+        return user;
     }
 
-    public void setUserName(UserDto userName) {
-        this.userName = userName;
+    public void setUser(UserDto user) {
+        this.user = user;
     }
 }

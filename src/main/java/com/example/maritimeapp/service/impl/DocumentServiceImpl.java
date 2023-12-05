@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.AddDocumentDto;
 import com.example.maritimeapp.model.dto.DocumentDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.DocumentEntity;
@@ -32,20 +33,19 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
-    public String addDocument(DocumentDto documentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,String username) {
+    public String addDocument(AddDocumentDto addDocumentDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, String username) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("documentDto", documentDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.documentDto", bindingResult);
+            redirectAttributes.addFlashAttribute("addDocumentDto", addDocumentDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addDocumentDto", bindingResult);
 
             return "redirect:add";
         }
 
-        DocumentEntity documentToSave = modelMapper.map(documentDto, DocumentEntity.class);
-
-        documentToSave.setType(documentDto.getDocumentType());
+        DocumentEntity documentToSave = modelMapper.map(addDocumentDto, DocumentEntity.class);
 
         UserEntity possessor = userService.findUserByUsername(username)
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException(String.format("User with username %s does not exist", username)));
+
         documentToSave.setPossessor(possessor);
         documentToSave.setStatus(StatusEnum.VALID);
         documentRepository.save(documentToSave);
@@ -54,34 +54,26 @@ public class DocumentServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentDto> getDocumentsByUsername(String username) {
-
         UserEntity possessor = userService.findUserByUsername(username)
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException(String.format("User with username %s does not exist", username)));
 
         return documentRepository.findAllByPossessor(possessor)
             .stream()
-            .map(d -> {
-                DocumentDto docToShow = modelMapper.map(d, DocumentDto.class);
-                docToShow.setDocumentType(d.getType());
-                return docToShow;
-            })
+            .map(d -> modelMapper.map(d, DocumentDto.class))
             .toList();
     }
 
     @Override
-    public void removeDocument(Long documentId,String username) {
-
+    public void removeDocument(Long documentId, String username) {
         DocumentEntity document = documentRepository.findById(documentId)
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Document with ID: %d does not exist.", documentId)));
 
-        if (document != null) {
-            if (document.getPossessor().getUsername().equals(username)) {
-                documentRepository.delete(document);
-            } else {
-                throw new SecurityException("User does not have permission to delete this document");
-            }
+        if (document.getPossessor()
+            .getUsername()
+            .equals(username)) {
+            documentRepository.delete(document);
         } else {
-            throw new NullPointerException("Document not found");
+            throw new SecurityException("User does not have permission to delete this document");
         }
     }
 
@@ -90,20 +82,16 @@ public class DocumentServiceImpl implements DocumentService {
         return documentRepository.findAll()
             .stream()
             .map(d -> {
-                UserEntity possessor = userService.findUserByUsername(d.getPossessor()
-                                                                          .getUsername())
-                    .orElse(null);
-
                 DocumentDto documentToShow = modelMapper.map(d, DocumentDto.class);
-                documentToShow.setDocumentType(d.getType());
-                documentToShow.setPossessor(modelMapper.map(possessor, UserDto.class));
+                documentToShow.setPossessor(modelMapper.map(d.getPossessor(), UserDto.class));
+
                 return documentToShow;
             })
             .toList();
     }
 
     @Override
-    public void checkIfDocumentExpiredAndChangeStatus() {
+    public void changeDocumentStatusIfExpired() {
         documentRepository.findAll()
             .forEach(this::updateStatusIfExpired);
     }

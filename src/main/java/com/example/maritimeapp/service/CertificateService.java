@@ -9,14 +9,13 @@ public interface CertificateService {
     /**
      * Add certificate to a certain ship
      * @param certificateDto Certificate info that is coming from the UI
-     * @param bindingResult Manage data binding validation errors between a user input and validation annotations
-     * @param redirectAttributes  Pass data of HTTP request then redirecting
+     * @param bindingResult
+     * @param redirectAttributes
      */
     String addCertificate(CertificateDto certificateDto, BindingResult bindingResult, RedirectAttributes redirectAttributes);
-
 
     /**
      * Check if certain certificate expired and change status to Expired
      */
-    void checkIfCertificateExpiredAndChangeStatus();
+    void changeCertificateStatusIfExpired();
 }

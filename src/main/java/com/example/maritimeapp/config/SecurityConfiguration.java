@@ -32,7 +32,7 @@ public class SecurityConfiguration {
                     .authenticated())
             .formLogin(formLogin -> formLogin
                 // redirect here when we access something which is not allowed.
-                // also this is the page where we perform login.
+                // also, this is the page where we perform login.
                 .loginPage("/users/login")
                 // The names of the input fields (in our case in login.html)
                 .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)

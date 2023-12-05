@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,39 +41,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @PostConstruct
-    private void initAdmin() {
-        initAdminWithStartOfApp();
+    private void init() {
+        initAdmin();
     }
 
     @Override
     public String register(UserDto userDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors() || !userDto.getPassword()
-            .equals(userDto.getConfirmPassword())) {
-
+        if (bindingResult.hasErrors() || !userDto.getPassword().equals(userDto.getConfirmPassword())) {
             redirectAttributes.addFlashAttribute("userDto", userDto);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userDto", bindingResult);
 
             return "redirect:register";
         }
 
-        UserEntity user = checkIfExistingUser(userDto);
-
-        if (user == null) {
-            UserEntity userToSave = modelMapper.map(userDto, UserEntity.class);
-            userToSave.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            userToSave.setRegistryDate(LocalDateTime.now());
-            userToSave.setPosition(userDto.getPosition());
-            userToSave.setRoles(roleService.findAll()
-                                    .stream()
-                                    .filter(r -> r.getRole()
-                                        .equals(RoleEnum.USER))
-                                    .collect(Collectors.toSet()));
-
-            userRepository.save(userToSave);
-            return "redirect:login";
+        UserEntity existingUser = checkIfExistingUser(userDto);
+        if (existingUser != null) {
+            return "redirect:register";
         }
 
-        return "redirect:register";
+        UserEntity userToSave = modelMapper.map(userDto, UserEntity.class);
+        userToSave.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        userToSave.setRegistryDate(LocalDateTime.now());
+        userToSave.setPosition(userDto.getPosition());
+        userToSave.setRoles(roleService.findAll()
+                                .stream()
+                                .filter(r -> r.getRole()
+                                    .equals(RoleEnum.USER))
+                                .collect(Collectors.toSet()));
+
+        userRepository.save(userToSave);
+        return "redirect:login";
     }
 
     @Override
@@ -84,44 +80,47 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserEntity> findAll() {
-
         return userRepository.findAll();
     }
 
     @Override
     public List<UserDto> getAllEmployees() {
-        List<UserEntity> employees = userRepository.findAll();
-
-        List<UserDto> employeesToShow = new ArrayList<>();
-
-        for (UserEntity employee : employees) {
-
-            if (employee.getRoles()
-                .stream()
-                .anyMatch(r -> r.getRole()
-                    .equals(RoleEnum.ADMIN))) {
-                continue;
-            }
-            UserDto user = modelMapper.map(employee, UserDto.class);
-            employeesToShow.add(user);
-        }
-
-        return employeesToShow;
+        return userRepository.findAll().stream()
+            .filter(u -> 
+                u.getRoles().stream()
+                    .anyMatch(r -> RoleEnum.ADMIN.equals(r.getRole()))
+            ).map(e -> modelMapper.map(e, UserDto.class))
+            .toList();
+//
+//        List<UserDto> employeesToShow = new ArrayList<>();
+//
+//        for (UserEntity employee : employees) {
+//            if (employee.getRoles()
+//                .stream()
+//                .anyMatch(r -> r.getRole()
+//                    .equals(RoleEnum.ADMIN))) {
+//                continue;
+//            }
+//            UserDto user = modelMapper.map(employee, UserDto.class);
+//            employeesToShow.add(user);
+//        }
+//
+//        return employeesToShow;
     }
 
     @Override
-    public void changePositionOfUserAndKeepHistory(Long userId, PositionEnum position) {
-
-        UserEntity user =
-            userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException(String.format("User with ID %d doest not exist",userId)));
+    public void changePositionOfUser(Long userId, PositionEnum position) {
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(()->new IllegalArgumentException(String.format("User with ID %d doest not exist", userId)));
 
         UserPositionHistory changeOfPositionHistory = new UserPositionHistory();
         changeOfPositionHistory.setPreviousPosition(user.getPosition().getDescription());
         user.setPosition(position);
         userRepository.save(user);
+
         changeOfPositionHistory.setNewPosition(user.getPosition().getDescription());
         changeOfPositionHistory.setDateOfChange(LocalDate.now());
-        changeOfPositionHistory.setEmployees(user);
+        changeOfPositionHistory.setEmployee(user);
         userPositionHistoryRepository.save(changeOfPositionHistory);
     }
 
@@ -130,10 +129,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId);
     }
 
-    private void initAdminWithStartOfApp() {
+    private void initAdmin() {
         if (userRepository.count() != 0) {
             return;
         }
+
         UserEntity userAdmin = new UserEntity();
         userAdmin.setUsername("Daniel");
         userAdmin.setFirstName("Daniel");
@@ -152,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
 
     private UserEntity checkIfExistingUser(UserDto userDto) {
-        return userRepository.findUserByEmail(userDto.getEmail())
+        return userRepository.findUserByUsernameOrEmail(userDto.getUsername(), userDto.getEmail())
             .orElse(null);
     }
 

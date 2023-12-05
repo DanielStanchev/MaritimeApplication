@@ -1,8 +1,7 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ChangePositionDto;
+import com.example.maritimeapp.model.dto.ChangePositionHistoryDto;
 import com.example.maritimeapp.model.dto.UserDto;
-import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.repository.UserPositionHistoryRepository;
 import com.example.maritimeapp.service.UserPositionHistoryService;
 import com.example.maritimeapp.service.UserService;
@@ -16,28 +15,21 @@ public class UserPositionHistoryServiceImpl implements UserPositionHistoryServic
 
     private final UserPositionHistoryRepository userPositionHistoryRepository;
     private final ModelMapper modelMapper;
-    private final UserService userService;
 
-    public UserPositionHistoryServiceImpl(UserPositionHistoryRepository userPositionHistoryRepository, ModelMapper modelMapper, UserService userService) {
+    public UserPositionHistoryServiceImpl(UserPositionHistoryRepository userPositionHistoryRepository, ModelMapper modelMapper) {
         this.userPositionHistoryRepository = userPositionHistoryRepository;
         this.modelMapper = modelMapper;
-        this.userService = userService;
     }
 
-
     @Override
-    public List<ChangePositionDto> getAllUsersWithChangedPosition() {
+    public List<ChangePositionHistoryDto> getAllUsersWithChangedPosition() {
         return userPositionHistoryRepository.findAll()
             .stream()
-            .map(u -> {
+            .map(userPositionHistory -> {
+                ChangePositionHistoryDto changePositionHistoryDto = modelMapper.map(userPositionHistory, ChangePositionHistoryDto.class);
+                changePositionHistoryDto.setUser(modelMapper.map(userPositionHistory.getEmployee(), UserDto.class));
 
-                UserEntity user = userService.findUserByUsername(u.getEmployees()
-                                                                     .getUsername())
-                    .orElse(null);
-
-                ChangePositionDto changedUser = modelMapper.map(u, ChangePositionDto.class);
-                changedUser.setUserName(modelMapper.map(user, UserDto.class));
-                return changedUser;
+                return changePositionHistoryDto;
             })
             .toList();
     }
@@ -46,5 +38,4 @@ public class UserPositionHistoryServiceImpl implements UserPositionHistoryServic
     public void deleteAllPositionChangeHistory() {
         userPositionHistoryRepository.deleteAll();
     }
-
 }

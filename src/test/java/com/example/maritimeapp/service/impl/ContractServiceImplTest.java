@@ -3,7 +3,6 @@ package com.example.maritimeapp.service.impl;
 import com.example.maritimeapp.model.dto.AddContractDto;
 import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.ShipDto;
-import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.ContractEntity;
 import com.example.maritimeapp.model.entity.RoleEntity;
 import com.example.maritimeapp.model.entity.ShipEntity;
@@ -37,7 +36,6 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -131,7 +129,7 @@ class ContractServiceImplTest {
 
         when(contractRepository.findById(anyLong())).thenReturn(Optional.of(mockContract));
 
-        contractServiceImpl.payRaiseAndKeepHistory(1L, BigDecimal.valueOf(1000));
+        contractServiceImpl.payRaise(1L, BigDecimal.valueOf(1000));
 
         assertEquals(BigDecimal.valueOf(6000), mockContract.getSalary());
         assertEquals(1, mockContract.getNumberOfPayRaises());
@@ -200,7 +198,7 @@ class ContractServiceImplTest {
 
 
     @Test
-    void testGetAllContracts() {
+    void testGetAllContractsIfRepoIsEmpty() {
 
         List<ContractEntity> contractEntities = new ArrayList<>();
         assertTrue(contractServiceImpl.getAllContracts()
@@ -208,18 +206,21 @@ class ContractServiceImplTest {
     }
 
     @Test
-    void testGetAllContacts2() {
+    void testGetAllContactsIfRepoIsNotEmpty() {
+        ShipEntity ship = getShip();
 
         List<ContractEntity> contractEntities = new ArrayList<>();
-        contractEntities.add(getContractEntity1());
-        contractEntities.add(getContractEntity2());
+        ContractEntity contact1 =getContractEntity1();
+        contact1.setShip(ship);
+
+        contractEntities.add(contact1);
 
         when(contractRepository.findAll()).thenReturn(contractEntities);
 
         UserEntity possessor = getUserEntity();
-        ShipEntity ship = new ShipEntity();
-        when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(possessor));
-        when(shipService.findShipByShipName(anyString())).thenReturn(ship);
+
+        when(userService.findById(anyLong())).thenReturn(Optional.of(possessor));
+        when(shipService.findById(anyLong())).thenReturn(Optional.of(ship));
 
         ContractDto contractDto = new ContractDto();
         contractDto.setId(12L);
@@ -230,7 +231,7 @@ class ContractServiceImplTest {
 
         when(modelMapper.map(any(), eq(ContractDto.class))).thenReturn(contractDto);
 
-        assertEquals(2, contractServiceImpl.getAllContracts()
+        assertEquals(1, contractServiceImpl.getAllContracts()
             .size());
     }
 
@@ -283,5 +284,12 @@ class ContractServiceImplTest {
         contractDto.setDisembarkDate(LocalDate.of(2024, 9, 13));
         contractDto.setStartDate(LocalDate.of(2023, 12, 30));
         return contractDto;
+    }
+
+    private ShipEntity getShip(){
+        ShipEntity ship = new ShipEntity();
+        ship.setId(12L);
+        ship.setContracts(Set.of(getContractEntity1(),getContractEntity2()));
+        return ship;
     }
 }

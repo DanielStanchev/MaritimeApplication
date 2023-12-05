@@ -1,7 +1,7 @@
 package com.example.maritimeapp.web;
 
 import com.example.maritimeapp.constants.Role;
-import com.example.maritimeapp.model.dto.ChangePositionDto;
+import com.example.maritimeapp.model.dto.AddPaidLeaveDto;
 import com.example.maritimeapp.model.dto.PaidLeaveDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.enums.PaidLeaveStatusEnum;
@@ -69,7 +69,6 @@ public class UserController {
     @Secured(Role.ADMIN)
     @GetMapping("/promote")
     public String showPromotePanel(Model model) {
-
         model.addAttribute("totalEmployeesInCompany", userService.getAllEmployees());
         model.addAttribute("positions", PositionEnum.values());
         model.addAttribute("getUpdatedUsers", userPositionHistoryService.getAllUsersWithChangedPosition());
@@ -81,8 +80,7 @@ public class UserController {
     @Secured(Role.ADMIN)
     @PatchMapping("/{userId}/promote")
     public String promoteUser(@PathVariable("userId") Long userId, @RequestParam(value = "position", required = false) PositionEnum position) {
-
-        userService.changePositionOfUserAndKeepHistory(userId, position);
+        userService.changePositionOfUser(userId, position);
 
         return "redirect:/users/promote";
     }
@@ -102,9 +100,10 @@ public class UserController {
     }
 
     @PostMapping("/schedule-a-paid-leave")
-    public String scheduleAPaidLeaveConfirm(@Valid PaidLeaveDto paidLeaveDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String scheduleAPaidLeaveConfirm(@Valid AddPaidLeaveDto addPaidLeaveDto, BindingResult bindingResult,
+                                            RedirectAttributes redirectAttributes) {
         User loggedInUser = SecurityUtl.getLoggedInUser();
-        return paidLeaveService.scheduleAPaidLeave(paidLeaveDto, bindingResult, redirectAttributes, loggedInUser.getUsername());
+        return paidLeaveService.schedulePaidLeave(addPaidLeaveDto, bindingResult, redirectAttributes, loggedInUser.getUsername());
     }
 
     @GetMapping("paid-leave-status")
@@ -121,9 +120,8 @@ public class UserController {
     @Secured(Role.ADMIN)
     @GetMapping("show-all-paid-leave")
     public String showAllPaidLeave(Model model) {
-
         model.addAttribute("assessments", paidLeaveService.getAllPaidLeaveAssessments());
-        model.addAttribute("allStatuses", PaidLeaveStatusEnum.values());
+        model.addAttribute("allStatuses", paidLeaveService.showStatuses());
         return "show-all-paid-leave";
     }
 
@@ -139,18 +137,12 @@ public class UserController {
 
 
     @ModelAttribute
-    PaidLeaveDto paidLeaveDto() {
-        return new PaidLeaveDto();
+    AddPaidLeaveDto addPaidLeaveDto() {
+        return new AddPaidLeaveDto();
     }
 
     @ModelAttribute
     UserDto userRegisterDto() {
         return new UserDto();
     }
-
-    @ModelAttribute
-    ChangePositionDto changePositionDto() {
-        return new ChangePositionDto();
-    }
-
 }

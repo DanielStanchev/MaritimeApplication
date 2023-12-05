@@ -24,10 +24,13 @@ public class AddContractDto {
     private LocalDate disembarkDate;
 
     @Positive
+    @NotNull
     private BigDecimal salary;
 
+    @NotNull
     private Long employeeId;
 
+    @NotNull
     private Long shipId;
 
     public AddContractDto() {}

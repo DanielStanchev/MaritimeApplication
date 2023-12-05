@@ -29,10 +29,8 @@ public class CertificateController {
         this.shipService = shipService;
     }
 
-
     @GetMapping("/add")
     public String addCertificate(Model model) {
-
         model.addAttribute("ships", shipService.getShips());
 
         return "certificate-add";
@@ -41,7 +39,6 @@ public class CertificateController {
     @PostMapping("/add")
     public String addCertificateConfirm(@Valid CertificateDto certificateDto, BindingResult bindingResult,
                                         RedirectAttributes redirectAttributes) {
-
         return certificateService.addCertificate(certificateDto, bindingResult, redirectAttributes);
     }
 
@@ -49,5 +46,4 @@ public class CertificateController {
     public CertificateDto certificateAddDto() {
         return new CertificateDto();
     }
-
 }

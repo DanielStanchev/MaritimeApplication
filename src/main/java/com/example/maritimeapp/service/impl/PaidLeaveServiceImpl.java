@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.AddPaidLeaveDto;
 import com.example.maritimeapp.model.dto.PaidLeaveDto;
 import com.example.maritimeapp.model.dto.UserDto;
 import com.example.maritimeapp.model.entity.PaidLeaveEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -29,28 +31,32 @@ public class PaidLeaveServiceImpl implements PaidLeaveService {
     }
 
     @Override
-    public String scheduleAPaidLeave(PaidLeaveDto paidLeaveDto, BindingResult bindingResult, RedirectAttributes redirectAttributes, String username) {
+    public String schedulePaidLeave(AddPaidLeaveDto addPaidLeaveDto, BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                                    String username) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("paidLeaveDto", paidLeaveDto);
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.paidLeaveDto", bindingResult);
+            redirectAttributes.addFlashAttribute("addPaidLeaveDto", addPaidLeaveDto);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addPaidLeaveDto", bindingResult);
 
             return "redirect:schedule-a-paid-leave";
         }
 
-        PaidLeaveEntity paidLeaveToSubmit = modelMapper.map(paidLeaveDto, PaidLeaveEntity.class);
+        PaidLeaveEntity paidLeaveToSubmit = modelMapper.map(addPaidLeaveDto, PaidLeaveEntity.class);
 
         UserEntity employee = userService.findUserByUsername(username)
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException(String.format("User with username %s does not exist", username)));
+
         paidLeaveToSubmit.setEmployee(employee);
         paidLeaveToSubmit.setStatus(PaidLeaveStatusEnum.PENDING);
         paidLeaveRepository.save(paidLeaveToSubmit);
+
         return "redirect:/users/paid-leave-status";
     }
 
     @Override
     public List<PaidLeaveDto> getPaidLeaveByUser(String username) {
         UserEntity employee = userService.findUserByUsername(username)
-            .orElse(null);
+            .orElseThrow(() -> new IllegalArgumentException(String.format("User with username %s does not exist", username)));
+
         return paidLeaveRepository.findAllByEmployee(employee)
             .stream()
             .map(p -> modelMapper.map(p, PaidLeaveDto.class))
@@ -59,32 +65,31 @@ public class PaidLeaveServiceImpl implements PaidLeaveService {
 
     @Override
     public List<PaidLeaveDto> getAllPaidLeaveAssessments() {
-        return paidLeaveRepository.findAll()
+        return paidLeaveRepository.findAllPendingPaidLeaveRequests()
             .stream()
-            .filter(p -> p.getStatus()
-                .getDescription()
-                .equals("Pending"))
             .map(p -> {
                 PaidLeaveDto paidLeaveToShow = modelMapper.map(p, PaidLeaveDto.class);
+                paidLeaveToShow.setEmployee(modelMapper.map(p.getEmployee(), UserDto.class));
 
-                UserEntity possessor = userService.findUserByUsername(p.getEmployee()
-                                                                          .getUsername())
-                    .orElse(null);
-                paidLeaveToShow.setEmployee(modelMapper.map(possessor, UserDto.class));
                 return paidLeaveToShow;
             })
             .toList();
-
     }
 
     @Override
-    public void changeStatusOfPaidLeaveAssessment(Long userId, PaidLeaveStatusEnum status) {
-
-        final PaidLeaveEntity paidLeaveEntity = paidLeaveRepository.findById(userId)
-            .orElseThrow(()->new IllegalArgumentException(String.format("User with ID %d does not exist",userId)));
+    public void changeStatusOfPaidLeaveAssessment(Long paidLeaveEntityId, PaidLeaveStatusEnum status) {
+        final PaidLeaveEntity paidLeaveEntity = paidLeaveRepository.findById(paidLeaveEntityId)
+            .orElseThrow(() -> new IllegalArgumentException(String.format("Paid leave entry with ID: %d does not exist", paidLeaveEntityId)));
 
         paidLeaveEntity.setStatus(status);
         paidLeaveRepository.save(paidLeaveEntity);
+    }
+
+    @Override
+    public List<PaidLeaveStatusEnum> showStatuses() {
+        return Arrays.stream(PaidLeaveStatusEnum.values())
+            .filter(p -> !PaidLeaveStatusEnum.PENDING.equals(p))
+            .toList();
     }
 }
 

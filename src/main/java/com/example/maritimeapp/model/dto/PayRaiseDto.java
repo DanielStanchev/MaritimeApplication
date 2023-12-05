@@ -15,7 +15,7 @@ public class PayRaiseDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfChange;
 
-    private UserDto userName;
+    private UserDto employee;
 
     public PayRaiseDto() {
     }
@@ -52,11 +52,11 @@ public class PayRaiseDto {
         this.dateOfChange = dateOfChange;
     }
 
-    public UserDto getUserName() {
-        return userName;
+    public UserDto getEmployee() {
+        return employee;
     }
 
-    public void setUserName(UserDto userName) {
-        this.userName = userName;
+    public void setEmployee(UserDto employee) {
+        this.employee = employee;
     }
 }

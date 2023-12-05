@@ -14,7 +14,7 @@ public class DocumentDto {
     private Long id;
 
     @NotNull
-    private DocumentTypeEnum documentType;
+    private DocumentTypeEnum type;
 
     private String description;
 
@@ -35,12 +35,12 @@ public class DocumentDto {
     public DocumentDto() {
     }
 
-    public DocumentTypeEnum getDocumentType() {
-        return documentType;
+    public DocumentTypeEnum getType() {
+        return type;
     }
 
-    public void setDocumentType(DocumentTypeEnum documentType) {
-        this.documentType = documentType;
+    public void setType(DocumentTypeEnum documentType) {
+        this.type = documentType;
     }
 
     public String getDescription() {

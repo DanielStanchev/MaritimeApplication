@@ -21,7 +21,7 @@ public class UserSalaryHistory extends BaseEntity{
     private LocalDate dateOfChange;
 
     @ManyToOne
-    private UserEntity employees;
+    private UserEntity employee;
 
     public UserSalaryHistory() {
     }
@@ -50,11 +50,11 @@ public class UserSalaryHistory extends BaseEntity{
         this.dateOfChange = dateOfChange;
     }
 
-    public UserEntity getEmployees() {
-        return employees;
+    public UserEntity getEmployee() {
+        return employee;
     }
 
-    public void setEmployees(UserEntity employees) {
-        this.employees = employees;
+    public void setEmployee(UserEntity employee) {
+        this.employee = employee;
     }
 }

@@ -51,7 +51,6 @@ public class ContractController {
     @Secured(Role.ADMIN)
     @GetMapping("/add")
     public String add(Model model) {
-
         model.addAttribute("employees", userService.getAllEmployees());
         model.addAttribute("ships", shipService.getShips());
 
@@ -112,8 +111,8 @@ public class ContractController {
     public String payRaiseToUser(@PathVariable("contractId") Long contractId,
                                  @RequestParam(value = "bonusAmount", required = false) BigDecimal bonusAmount) {
 
-        logger.info(String.format("Bonus Amount %s", bonusAmount));
-        contractService.payRaiseAndKeepHistory(contractId, bonusAmount);
+        logger.info("Bonus Amount {}", bonusAmount);
+        contractService.payRaise(contractId, bonusAmount);
         return "redirect:/contracts/pay-raise";
     }
 

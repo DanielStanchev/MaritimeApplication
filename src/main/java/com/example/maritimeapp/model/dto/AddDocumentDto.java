@@ -1,45 +1,44 @@
 package com.example.maritimeapp.model.dto;
 
+import com.example.maritimeapp.model.entity.enums.DocumentTypeEnum;
 import com.example.maritimeapp.model.entity.enums.StatusEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
-public class CertificateDto {
+public class AddDocumentDto {
 
-    @Size(min = 2, max = 50)
-    private String name;
+    private Long id;
+
+    @NotNull
+    private DocumentTypeEnum type;
 
     private String description;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @PastOrPresent
-    private LocalDate startDate;
+    private LocalDate issueDate;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @FutureOrPresent
     private LocalDate expiryDate;
 
-    @NotNull
-    private Long shipId;
-
     private StatusEnum status;
 
-    public CertificateDto() {
+    public AddDocumentDto() {
     }
 
-    public String getName() {
-        return name;
+    public DocumentTypeEnum getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(DocumentTypeEnum type) {
+        this.type = type;
     }
 
     public String getDescription() {
@@ -50,12 +49,12 @@ public class CertificateDto {
         this.description = description;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDate getIssueDate() {
+        return issueDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
     }
 
     public LocalDate getExpiryDate() {
@@ -66,12 +65,12 @@ public class CertificateDto {
         this.expiryDate = expiryDate;
     }
 
-    public Long getShipId() {
-        return shipId;
+    public Long getId() {
+        return id;
     }
 
-    public void setShipId(Long shipId) {
-        this.shipId = shipId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public StatusEnum getStatus() {

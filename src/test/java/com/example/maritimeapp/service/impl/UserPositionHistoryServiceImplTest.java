@@ -1,6 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ChangePositionDto;
+import com.example.maritimeapp.model.dto.ChangePositionHistoryDto;
 import com.example.maritimeapp.model.entity.RoleEntity;
 import com.example.maritimeapp.model.entity.UserEntity;
 import com.example.maritimeapp.model.entity.UserPositionHistory;
@@ -22,7 +22,6 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,12 +51,12 @@ class UserPositionHistoryServiceImplTest {
         when(userPositionHistoryRepository.findAll()).thenReturn(users);
 
         UserEntity user = getUserEntity();
-        when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(user));
+        when(userService.findById(user.getId())).thenReturn(Optional.of(user));
 
-        ChangePositionDto changePositionDto = new ChangePositionDto();
+        ChangePositionHistoryDto changePositionDto = new ChangePositionHistoryDto();
         changePositionDto.setId(1L);
 
-        when(modelMapper.map(any(), eq(ChangePositionDto.class))).thenReturn(changePositionDto);
+        when(modelMapper.map(any(), eq(ChangePositionHistoryDto.class))).thenReturn(changePositionDto);
 
         assertEquals(1, userPositionHistoryService.getAllUsersWithChangedPosition()
             .size());
@@ -77,7 +76,7 @@ class UserPositionHistoryServiceImplTest {
         userPositionHistory.setDateOfChange(LocalDate.of(2024, 9, 12));
         userPositionHistory.setPreviousPosition(PositionEnum.COOK.getDescription());
         userPositionHistory.setNewPosition(PositionEnum.OILER.getDescription());
-        userPositionHistory.setEmployees(getUserEntity());
+        userPositionHistory.setEmployee(getUserEntity());
         return userPositionHistory;
 
     }
