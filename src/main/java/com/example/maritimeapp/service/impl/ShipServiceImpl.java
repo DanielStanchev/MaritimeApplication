@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.CertificateDto;
 import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.repository.ShipRepository;
@@ -43,7 +44,14 @@ public class ShipServiceImpl implements ShipService {
     public List<ShipDto> getShips() {
         return shipRepository.findAll()
             .stream()
-            .map(s -> modelMapper.map(s, ShipDto.class))
+            .map(ship -> {
+                ShipDto shipDto = modelMapper.map(ship, ShipDto.class);
+                List<CertificateDto> certificatesToShow = ship.getCertificates().stream()
+                    .map(certificate -> modelMapper.map(certificate, CertificateDto.class))
+                    .toList();
+                shipDto.setCertificates(certificatesToShow);
+                return shipDto;
+            })
             .toList();
     }
 

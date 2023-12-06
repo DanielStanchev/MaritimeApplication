@@ -15,7 +15,6 @@
         </div>
 
 
-
         <!--        <div class="row mt-3 mb-3">-->
         <div class="container bg-blur rounded p-4 mt-1 w-75">
             <div th:if="${errorMessage}">
@@ -47,6 +46,17 @@
                         <tr>
                             <td class="font-weight-bold">Additional info</td>
                             <td th:text="*{ship.additionalInfo}"></td>
+                        </tr>
+
+                        <tr>
+                            <td class="font-weight-bold">Certificates</td>
+                            <td>
+                                <ul>
+                                    <li th:each="certificate : ${ship.certificates}">
+                                        <span th:text="|Name: ${certificate.name} - ${certificate.description} (Status: ${certificate.status.description})|"></span>
+                                    </li>
+                                </ul>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

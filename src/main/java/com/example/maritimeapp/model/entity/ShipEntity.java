@@ -1,5 +1,6 @@
 package com.example.maritimeapp.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,7 @@ public class ShipEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "userShip")
     private Set<UserEntity> crewMember = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ship")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ship",cascade = CascadeType.ALL)
     private Set<CertificateEntity> certificates = new HashSet<>();
 
     @OneToMany(mappedBy = "ship", fetch = FetchType.EAGER)

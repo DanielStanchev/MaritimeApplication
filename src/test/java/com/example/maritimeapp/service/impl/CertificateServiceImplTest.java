@@ -66,7 +66,7 @@ class CertificateServiceImplTest {
 
         String result = certificateService.addCertificate(certificateDto, bindingResult, redirectAttributes);
 
-        assertEquals("redirect:/", result);
+        assertEquals("redirect:/ships/show", result);
     }
 
     @Test

@@ -24,7 +24,9 @@ public class ShipController {
 
     private final ShipService shipService;
 
-    public ShipController(ShipService shipService) {this.shipService = shipService;}
+    public ShipController(ShipService shipService) {
+        this.shipService = shipService;
+    }
 
     @GetMapping("/add")
     public String add() {
@@ -39,9 +41,7 @@ public class ShipController {
 
     @GetMapping("/show")
     public String allShips(Model model) {
-
         model.addAttribute("ships", shipService.getShips());
-
         return "all-ships";
     }
 

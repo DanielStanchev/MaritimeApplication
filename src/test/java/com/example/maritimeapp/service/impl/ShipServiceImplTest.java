@@ -1,5 +1,6 @@
 package com.example.maritimeapp.service.impl;
 
+import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.repository.ShipRepository;
@@ -88,7 +89,10 @@ class ShipServiceImplTest {
         shipEntities.add(getShip1());
         shipEntities.add(getShip2());
 
+        ShipDto ship = getShipDto();
+
         when(shipRepository.findAll()).thenReturn(shipEntities);
+        when(modelMapper.map(any(), eq(ShipDto.class))).thenReturn(ship);
 
         List<ShipDto> ships = shipServiceToTest.getShips();
 

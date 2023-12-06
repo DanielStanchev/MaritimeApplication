@@ -49,7 +49,7 @@ public class CertificateServiceImpl implements CertificateService {
         certificateToSave.setStatus(StatusEnum.VALID);
 
         certificateRepository.save(certificateToSave);
-        return "redirect:/";
+        return "redirect:/ships/show";
     }
 
     @Override

@@ -6,6 +6,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ShipDto {
 
@@ -27,6 +28,8 @@ public class ShipDto {
     private LocalDate registryDate;
 
     private String additionalInfo;
+
+    private List<CertificateDto> certificates;
 
     public ShipDto() {
     }
@@ -77,5 +80,13 @@ public class ShipDto {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
+    }
+
+    public List<CertificateDto> getCertificates() {
+        return certificates;
+    }
+
+    public void setCertificates(List<CertificateDto> certificates) {
+        this.certificates = certificates;
     }
 }
