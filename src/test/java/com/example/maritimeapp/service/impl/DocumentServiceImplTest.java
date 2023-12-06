@@ -86,7 +86,7 @@ class DocumentServiceImplTest {
 
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        when(modelMapper.map(any(DocumentDto.class), eq(DocumentEntity.class))).thenReturn(new DocumentEntity());
+        when(modelMapper.map(any(AddDocumentDto.class), eq(DocumentEntity.class))).thenReturn(new DocumentEntity());
 
         when(userService.findUserByUsername(anyString())).thenReturn(Optional.of(document.getPossessor()));
 
@@ -100,7 +100,6 @@ class DocumentServiceImplTest {
     @Test
     void testGetDocumentsByUsername() {
         DocumentEntity documentEntity = getDocumentEntity1();
-
 
         when(userService.findUserByUsername(documentEntity.getPossessor()
                                                 .getUsername())).thenReturn(Optional.of(documentEntity.getPossessor()));
@@ -148,9 +147,6 @@ class DocumentServiceImplTest {
         docs.add(getDocumentEntity2());
 
         when(documentRepository.findAll()).thenReturn(docs);
-
-        UserEntity possessor = getUserEntity();
-        when(userService.findById(possessor.getId())).thenReturn(Optional.of(possessor));
 
         DocumentDto documentDto = new DocumentDto();
         documentDto.setId(1L);
@@ -222,19 +218,6 @@ class DocumentServiceImplTest {
         documentDto.setIssueDate(LocalDate.of(2010, 11, 10));
 
         return documentDto;
-    }
-
-    private UserDto getUserDto() {
-        UserDto userDto = new UserDto();
-        userDto.setId(1L);
-        userDto.setUsername("gabriela");
-        userDto.setEmail("gabriela@localhost");
-        userDto.setPassword("gabriela");
-        userDto.setFirstName("gabriela");
-        userDto.setLastName("gabriela");
-        userDto.setConfirmPassword("gabriela");
-        userDto.setPosition(PositionEnum.MASTER);
-        return userDto;
     }
 
     private UserEntity getUserEntity() {

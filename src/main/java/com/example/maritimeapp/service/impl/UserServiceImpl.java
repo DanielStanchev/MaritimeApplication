@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,27 +86,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAllEmployees() {
-        return userRepository.findAll().stream()
-            .filter(u -> 
-                u.getRoles().stream()
-                    .anyMatch(r -> RoleEnum.ADMIN.equals(r.getRole()))
-            ).map(e -> modelMapper.map(e, UserDto.class))
-            .toList();
-//
-//        List<UserDto> employeesToShow = new ArrayList<>();
-//
-//        for (UserEntity employee : employees) {
-//            if (employee.getRoles()
-//                .stream()
-//                .anyMatch(r -> r.getRole()
-//                    .equals(RoleEnum.ADMIN))) {
-//                continue;
-//            }
-//            UserDto user = modelMapper.map(employee, UserDto.class);
-//            employeesToShow.add(user);
-//        }
-//
-//        return employeesToShow;
+        List<UserEntity> employees = userRepository.findAll();
+
+        List<UserDto> employeesToShow = new ArrayList<>();
+
+        for (UserEntity employee : employees) {
+            if (employee.getRoles()
+                .stream()
+                .anyMatch(r -> r.getRole()
+                    .equals(RoleEnum.ADMIN))) {
+                continue;
+            }
+            UserDto user = modelMapper.map(employee, UserDto.class);
+            employeesToShow.add(user);
+        }
+
+        return employeesToShow;
     }
 
     @Override

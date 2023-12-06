@@ -33,22 +33,6 @@ class MaritimeAppUserDetailServiceTest {
     }
 
     @Test
-    void testMock() {
-
-        UserEntity userEntity = new UserEntity();
-        userEntity.setFirstName("Pesho");
-
-        when(mockUserRepository.findUserByUsernameOrEmail("pesho","test@test")).thenReturn(Optional.of(userEntity));
-
-        Optional<UserEntity> userOpt = mockUserRepository.findUserByUsernameOrEmail("pehso", "test@test");
-
-        UserEntity user = userOpt.get();
-
-        Assertions.assertEquals("Pesho", user.getFirstName());
-
-    }
-
-    @Test
     void userNotFound() {
         Assertions.assertThrows(UsernameNotFoundException.class, () -> serviceToTest.loadUserByUsername("Pesho"));
     }
