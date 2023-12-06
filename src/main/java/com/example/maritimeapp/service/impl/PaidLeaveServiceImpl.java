@@ -42,8 +42,22 @@ public class PaidLeaveServiceImpl implements PaidLeaveService {
 
         PaidLeaveEntity paidLeaveToSubmit = modelMapper.map(addPaidLeaveDto, PaidLeaveEntity.class);
 
+        if(paidLeaveToSubmit.getDateFrom().isAfter(paidLeaveToSubmit.getDateTo())){
+            redirectAttributes.addFlashAttribute("invalidEndDate", "End date should be before starting date !");
+            return "redirect:schedule-a-paid-leave";
+        }
+
         UserEntity employee = userService.findUserByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException(String.format("User with username %s does not exist", username)));
+
+        PaidLeaveEntity existingPaidLeave = paidLeaveRepository.findIfThereIsAlreadyExistingPaidLeave(employee.getId(), paidLeaveToSubmit.getDateFrom(),
+                                                                                                  paidLeaveToSubmit.getDateTo())
+            .orElse(null);
+
+        if (existingPaidLeave != null) {
+            redirectAttributes.addFlashAttribute("invalidPaidLeave", "Employee has already scheduled a paid leave within selected dates!");
+            return "redirect:schedule-a-paid-leave";
+        }
 
         paidLeaveToSubmit.setEmployee(employee);
         paidLeaveToSubmit.setStatus(PaidLeaveStatusEnum.PENDING);
