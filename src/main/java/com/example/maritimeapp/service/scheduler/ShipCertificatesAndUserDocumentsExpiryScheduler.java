@@ -21,7 +21,7 @@ public class ShipCertificatesAndUserDocumentsExpiryScheduler {
         this.certificateService = certificateService;
     }
 
-    @Scheduled(cron = "* * */12 * * *")
+    @Scheduled(cron = "0 0 */12 * * *")
     public void setNewStatusesIfExpired(){
         logger.info("Triggered scheduler at {}", LocalDateTime.now());
 

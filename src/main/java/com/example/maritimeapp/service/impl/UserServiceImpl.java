@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
 
         UserEntity existingUser = checkIfExistingUser(userDto);
         if (existingUser != null) {
+            redirectAttributes.addFlashAttribute("existingUser", "User with such username or email already exists!");
             return "redirect:register";
         }
 
