@@ -1,6 +1,5 @@
 package com.example.maritimeapp.service.impl;
 
-import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.model.dto.ShipDto;
 import com.example.maritimeapp.model.entity.ShipEntity;
 import com.example.maritimeapp.repository.ShipRepository;

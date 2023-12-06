@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/commons::head}">
+</head>
+
+<body class="bg-secondary">
+<header th:replace="~{fragments/commons::nav}">
+</header>
+
+<main role="main" class="bg-secondary">
+    <div class="jumbotron text-center text-light">
+        <div class="container bg-blur rounded p-5 mt-5 w-75 ">
+            <h1>Ooops ! Please review your request in the URL bar as seems there might be typo</h1>
+            <a href="/">Go Home</a>
+            <hr class="bg-light">
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/commons::footer}">
+</footer>
+</body>
+</html>
