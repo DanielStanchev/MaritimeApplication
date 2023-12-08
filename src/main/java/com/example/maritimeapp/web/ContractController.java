@@ -51,7 +51,7 @@ public class ContractController {
     @Secured(Role.ADMIN)
     @GetMapping("/add")
     public String add(Model model) {
-        model.addAttribute("employees", userService.getAllEmployees());
+//        model.addAttribute("employees", userService.getAllEmployees());
         model.addAttribute("ships", shipService.getShips());
 
         return "contract-add";

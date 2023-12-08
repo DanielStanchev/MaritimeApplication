@@ -81,12 +81,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> findAll() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public List<UserDto> getAllEmployees() {
+    public List<UserDto> findAllEmployees() {
         List<UserEntity> employees = userRepository.findAll();
 
         List<UserDto> employeesToShow = new ArrayList<>();
@@ -124,6 +119,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<UserEntity> findById(Long userId) {
         return userRepository.findById(userId);
+    }
+
+    @Override
+    public List<UserDto> searchEmployees(String criteria) {
+       return userRepository.searchEmployees(criteria.toLowerCase()).stream()
+           .filter(user -> user.getRoles().stream().noneMatch(r -> RoleEnum.ADMIN.equals(r.getRole())))
+           .map(userEntity -> modelMapper.map(userEntity,UserDto.class))
+           .toList();
     }
 
     private void initAdmin() {

@@ -95,7 +95,7 @@ class UserServiceImplTestIT {
         when(userRepository.findAll()).thenReturn(allEmployees);
         UserDto user = getUserDto();
         when(modelMapper.map(any(), eq(UserDto.class))).thenReturn(user);
-        assertEquals(1, userServiceToTest.getAllEmployees().size());
+        assertEquals(1, userServiceToTest.findAllEmployees().size());
     }
 
     @Test

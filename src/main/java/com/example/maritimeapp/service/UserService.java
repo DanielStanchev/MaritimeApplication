@@ -26,15 +26,9 @@ public interface UserService {
     Optional<UserEntity> findUserByUsername(String username);
 
     /**
-     *
-     * Return all User from DB
-     */
-    List<UserEntity> findAll();
-
-    /**
      * Return view of all employees/users
      */
-    List<UserDto> getAllEmployees();
+    List<UserDto> findAllEmployees();
 
     /**
      * Change the company position of User and keep history of the change
@@ -48,4 +42,7 @@ public interface UserService {
      * @param userId The ID of certain user
      */
     Optional<UserEntity> findById(Long userId);
+
+
+    List<UserDto> searchEmployees(String username);
 }

@@ -14,6 +14,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +70,7 @@ public class UserController {
     @Secured(Role.ADMIN)
     @GetMapping("/promote")
     public String showPromotePanel(Model model) {
-        model.addAttribute("totalEmployeesInCompany", userService.getAllEmployees());
+        model.addAttribute("totalEmployeesInCompany", userService.findAllEmployees());
         model.addAttribute("positions", PositionEnum.values());
         model.addAttribute("getUpdatedUsers", userPositionHistoryService.getAllUsersWithChangedPosition());
 
@@ -134,7 +135,6 @@ public class UserController {
 
         return "redirect:/users/show-all-paid-leave";
     }
-
 
     @ModelAttribute
     AddPaidLeaveDto addPaidLeaveDto() {

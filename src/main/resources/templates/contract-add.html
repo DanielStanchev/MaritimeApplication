@@ -23,14 +23,19 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="employee" class="col-sm-2 col-form-label">Employee</label>
-                    <div class="col-sm-10">
-                        <select th:field="|*{employeeId}|" th:errorclass="is-invalid" id="employee" name="employee" class="custom-select"
-                                aria-describedby="employeeTypeHelpInline">
-                            <option value="" selected>Employee</option>
-                            <option th:each="e : ${employees}" th:value="${e.id}" th:text="|${e.getFirstName()} ${e.getLastName()}|"></option>
+                    <div class="col-sm-2">
+                        <label for="employeesList" class="col-form-label">Employee</label>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" id="employeeSearch"
+                               placeholder="Type to search" onkeyup="searchEmployees()"/>
+                    </div>
+                    <div class="col-sm-7">
+                        <select class="form-control" id="employeesList" name="employeeId" th:value="*{employeeId}" th:errorclass="is-invalid" aria-describedby="employeeTypeHelpInline">
+                            <option value="" selected>Search employees</option>
                         </select>
-                        <small id="employeeTypeHelpInline" class="invalid-feedback bg-danger text-light rounded">
+                        <small id="employeeTypeHelpInline"
+                               class="invalid-feedback bg-danger text-light rounded">
                             You must select employee.
                         </small>
                     </div>
@@ -91,7 +96,12 @@
     </div>
 </main>
 <footer th:replace="~{fragments/commons::footer}">
-
 </footer>
+
+<script>
+    document.getElementById('employeeSearch')
+        .addEventListener('keypress', preventWhitespace);
+</script>
+
 </body>
 </html>
