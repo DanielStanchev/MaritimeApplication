@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @EnableScheduling
-@SpringBootApplication
+@SpringBootApplication()
 @EnableGlobalMethodSecurity(
     prePostEnabled = true,
     securedEnabled = true,

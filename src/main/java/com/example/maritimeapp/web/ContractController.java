@@ -6,7 +6,6 @@ import com.example.maritimeapp.model.dto.ContractDto;
 import com.example.maritimeapp.service.ContractService;
 import com.example.maritimeapp.service.ShipService;
 import com.example.maritimeapp.service.UserSalaryHistoryService;
-import com.example.maritimeapp.service.UserService;
 import com.example.maritimeapp.util.SecurityUtl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,14 +35,12 @@ public class ContractController {
     private static final Logger logger = LoggerFactory.getLogger(ContractController.class);
 
     private final ContractService contractService;
-    private final UserService userService;
     private final ShipService shipService;
     private final UserSalaryHistoryService userSalaryHistoryService;
 
-    public ContractController(ContractService contractService, UserService userService, ShipService shipService,
+    public ContractController(ContractService contractService,ShipService shipService,
                               UserSalaryHistoryService userSalaryHistoryService) {
         this.contractService = contractService;
-        this.userService = userService;
         this.shipService = shipService;
         this.userSalaryHistoryService = userSalaryHistoryService;
     }
@@ -51,7 +48,6 @@ public class ContractController {
     @Secured(Role.ADMIN)
     @GetMapping("/add")
     public String add(Model model) {
-//        model.addAttribute("employees", userService.getAllEmployees());
         model.addAttribute("ships", shipService.getShips());
 
         return "contract-add";
